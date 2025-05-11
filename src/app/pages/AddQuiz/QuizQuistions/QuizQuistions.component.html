@@ -1,0 +1,13 @@
+<div class="border-2 p-3 rounded-md mt-10">
+  <div class="head flex items-center">
+    <div class="size-10 text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br
+    focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50
+    dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm flex items-center justify-center mr-2">1
+    </div>
+    <h2 class="text-xl">Quiz Questions :</h2>
+  </div>
+  @for (item of questions ; track $index; let i=$index) {
+   <app-Question [question]="item" [ind]="i"></app-Question>
+  }
+
+</div>
