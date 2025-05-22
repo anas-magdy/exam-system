@@ -10,10 +10,24 @@ import { IQuestion } from '../../Quize.service';
 })
 export class QuestionComponent implements OnInit {
   @Input() question!: IQuestion
-  @Input() ind!:number
+  @Input() ind!: number
   constructor() { }
 
   ngOnInit() {
+
   }
 
+  get validChoice(): boolean {
+    return this.question.Choices.length < 4 &&
+      this.question.Choices[this.question.Choices.length - 1]?.value !== '';
+  }
+  handelAddChoice() {
+    console.log(this.question.Choices)
+    if (this.question.Choices.length < 4 && this.question.Choices[this.question.Choices.length - 1].value != '') {
+      this.question.Choices.push({
+        key: String.fromCharCode(65 + this.question.Choices.length),
+        value: ''
+      })
+    }
+  }
 }

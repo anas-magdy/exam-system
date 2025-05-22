@@ -25,31 +25,12 @@ export class QuizService {
       {
         question: "What is the capital of France?",
         Choices: [
-          { key: "a", value: "London" },
-          { key: "b", value: "Paris" },
-          { key: "c", value: "Berlin" },
-          { key: "d", value: "Madrid" }
+          { key: "a", value: "" },
+          { key: "b", value: "" },
         ],
         correct: "b"
       },
-      {
-        question: "Which planet is known as the Red Planet?",
-        Choices: [
-          { key: "a", value: "London" },
-          { key: "b", value: "Paris" },
-
-        ],
-        correct: "b"
-      },
-      {
-        question: "What is the largest mammal in the world?",
-        Choices: [
-          { key: "a", value: "London" },
-          { key: "b", value: "Paris" },
-          { key: "c", value: "Berlin" },
-        ],
-        correct: "b"
-      }
+   
     ]
   };
 

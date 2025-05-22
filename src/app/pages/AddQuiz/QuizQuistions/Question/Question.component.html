@@ -12,21 +12,24 @@
         <input type="text" class="rounded-md w-[100%]" [(ngModel)]="item.value">
       </div>
       }
+      @if (validChoice) {
       <button type="button"
-        class="mt-2 ml-2 p-3 rounded-lg text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium text-sm text-center me-2 mb-2">
+        class="mt-2 ml-2 p-3 rounded-lg text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium text-sm text-center me-2 mb-2"
+        (click)="handelAddChoice()">
         Add Choice
       </button>
+      }
     </div>
 
   </div>
-    <div class="flex rounded-md p-5 mb-2 justify-center items-center">
-        <label for="correctAnswer" class="w-1/6 text-center">Correct Answer</label>
-        <select name="correctAnswer" id="" class="rounded-md w-5/6">
-          <option value=""></option>
-          @for (item of question.Choices; track item.key) {
-          <option [value]="item.key">{{item.key}}</option>
-          }
-        </select>
-    </div>
+  <div class="flex rounded-md p-5 mb-2 justify-center items-center">
+    <label for="correctAnswer" class="w-1/6 text-center">Correct Answer</label>
+    <select name="correctAnswer" id="" class="rounded-md w-5/6" [(ngModel)]="question.correct">
+      <option value=""></option>
+      @for (item of question.Choices; track item.key) {
+      <option [value]="item.key">{{item.key}}</option>
+      }
+    </select>
+  </div>
 
 </div>

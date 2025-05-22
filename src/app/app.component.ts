@@ -6,7 +6,7 @@ import { AddQuizComponent } from './pages/AddQuiz/AddQuiz.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,AddQuizComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

@@ -17,5 +17,6 @@ export class AddQuizComponent implements OnInit {
     this.quizData = this._quizService.quiz
     console.log(this.quizData)
   }
+  
 
 }

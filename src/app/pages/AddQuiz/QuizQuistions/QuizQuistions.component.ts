@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { QuestionComponent } from './Question/Question.component';
-import { IQuestion } from '../Quize.service';
+import { IQuestion, QuizService } from '../Quize.service';
 
 @Component({
   selector: 'app-QuizQuistions',
@@ -11,9 +11,27 @@ import { IQuestion } from '../Quize.service';
 })
 export class QuizQuistionsComponent implements OnInit {
   @Input() questions !: IQuestion[]
-  constructor() { }
+  constructor(private _quizService: QuizService) { }
 
   ngOnInit() {
+    console.log("object from anas", this._quizService.quiz)
   }
-
+  handelAddQuestion() {
+    this.questions = [
+      ...this.questions,
+      {
+        question: '',
+        Choices: [
+          { key: "A", value: "" },
+          { key: "B", value: "" }
+        ],
+        correct: ''
+      }
+    ];
+    console.log(this.questions);
+  }
+  handelOnSubmit() {
+    this._quizService.quiz.questions = this.questions
+    console.log(this._quizService.quiz)
+  }
 }
