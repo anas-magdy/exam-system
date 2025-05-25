@@ -3,6 +3,7 @@ import { AllTeacherExamsComponent } from './pages/teachers/teacher-exams/all-tea
 import { TeacherExamsComponent } from './pages/exams/teacher-exams/teacher-exams.component';
 
 export const routes: Routes = [
+
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'home',
@@ -43,4 +44,5 @@ export const routes: Routes = [
         (m) => m.ViewResultComponent
       ),
   },
+
 ];
