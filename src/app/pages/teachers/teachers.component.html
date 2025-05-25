@@ -1,0 +1,89 @@
+<!-- teachers.component.html -->
+<header class="my-5 text-center">
+  <h1 class="text-4xl font-bold">
+    Our <span class="text-green-600">Teachers</span>
+  </h1>
+</header>
+
+<main class="container mx-auto px-4">
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+  >
+    <app-teacher
+      *ngFor="let teacher of teachers"
+      [name]="teacher.name"
+      [title]="teacher.title"
+      [imageUrl]="teacher.imageUrl"
+    ></app-teacher>
+  </div>
+
+  <!-- Pagination -->
+  <nav aria-label="Page navigation" class="flex justify-center my-8">
+    <ul class="flex items-center -space-x-px h-10 text-base">
+      <!-- Previous Button -->
+      <li>
+        <button
+          (click)="changePage(currentPage - 1)"
+          [disabled]="currentPage === 1"
+          class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          <span class="sr-only">Previous</span>
+          <svg
+            class="w-3 h-3 rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 1 1 5l4 4"
+            />
+          </svg>
+        </button>
+      </li>
+
+      <!-- Page Numbers -->
+      <li *ngFor="let page of getPageNumbers()">
+        <button
+          (click)="changePage(page)"
+          [class.text-green-600]="currentPage === page"
+          [class.border-green-300]="currentPage === page"
+          [class.bg-green-100]="currentPage === page"
+          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          {{ page }}
+        </button>
+      </li>
+
+      <!-- Next Button -->
+      <li>
+        <button
+          (click)="changePage(currentPage + 1)"
+          [disabled]="currentPage === totalPages"
+          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          <span class="sr-only">Next</span>
+          <svg
+            class="w-3 h-3 rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 9 4-4-4-4"
+            />
+          </svg>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</main>
