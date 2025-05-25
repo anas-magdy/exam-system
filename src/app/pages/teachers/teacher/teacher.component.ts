@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-teacher',
@@ -10,4 +10,11 @@ export class TeacherComponent {
   @Input() name!: string;
   @Input() title!: string;
   @Input() imageUrl!: string;
+  @Input() teacherId!: string;
+
+  @Output() viewExams = new EventEmitter<string>();
+
+  onViewExams() {
+    this.viewExams.emit(this.teacherId); // ترسل teacherId للمكون الأب
+  }
 }

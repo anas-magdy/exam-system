@@ -1,4 +1,3 @@
-<!-- teachers.component.html -->
 <header class="my-5 text-center">
   <h1 class="text-4xl font-bold">
     Our <span class="text-green-600">Teachers</span>
@@ -6,6 +5,67 @@
 </header>
 
 <main class="container mx-auto px-4">
+  <!-- Search and Filter Section -->
+  <div
+    class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4"
+  >
+    <!-- Search Input -->
+    <div class="w-full md:w-1/3">
+      <div class="relative">
+        <div
+          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+        >
+          <svg
+            class="w-4 h-4 text-gray-500 dark:text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+        </div>
+        <input
+          type="search"
+          [(ngModel)]="searchQuery"
+          (input)="currentPage = 1"
+          class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-green-500 focus:border-green-500"
+          placeholder="Search teachers by name..."
+        />
+      </div>
+    </div>
+
+    <!-- Filter Dropdown -->
+    <div class="w-full md:w-1/3 flex gap-2">
+      <div class="relative w-full">
+        <select
+          [(ngModel)]="selectedTitle"
+          (change)="currentPage = 1"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2"
+        >
+          <option value="">All Specializations</option>
+          <option *ngFor="let title of titles" [value]="title">
+            {{ title }}
+          </option>
+        </select>
+      </div>
+
+      <button
+        (click)="resetFilters()"
+        class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200"
+      >
+        Reset
+      </button>
+    </div>
+  </div>
+
+  <!-- Teachers Grid -->
   <div
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
   >
@@ -14,11 +74,24 @@
       [name]="teacher.name"
       [title]="teacher.title"
       [imageUrl]="teacher.imageUrl"
+      [teacherId]="teacher.id"
+      (viewExams)="viewTeacherExams($event)"
     ></app-teacher>
   </div>
 
+  <!-- No Results Message -->
+  <div *ngIf="filteredTeachers.length === 0" class="text-center py-10">
+    <p class="text-gray-500 text-lg">
+      No teachers found matching your criteria.
+    </p>
+  </div>
+
   <!-- Pagination -->
-  <nav aria-label="Page navigation" class="flex justify-center my-8">
+  <nav
+    *ngIf="filteredTeachers.length > 0"
+    aria-label="Page navigation"
+    class="flex justify-center my-4"
+  >
     <ul class="flex items-center -space-x-px h-10 text-base">
       <!-- Previous Button -->
       <li>
