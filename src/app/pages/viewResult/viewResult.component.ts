@@ -16,8 +16,8 @@ export class ViewResultComponent implements AfterViewInit {
     if (isPlatformBrowser(this.platformId)) {
       const ApexCharts = (await import('apexcharts')).default;
       const chartOptions = {
-        series: [80.8,1, 18.2],
-        colors: ["#16BDCA", "#F9A825","#EA173F"],
+        series: [80.8, 1, 18.2],
+        colors: ["#16BDCA", "#F9A825", "#EA173F"],
         chart: {
           height: 420,
           width: "100%",
@@ -34,11 +34,11 @@ export class ViewResultComponent implements AfterViewInit {
             },
             size: "100%",
             dataLabels: {
-              offset: -25
+              offset: -45
             }
           },
         },
-        labels: ["Pass", "Acceptable","Failed"],
+        labels: ["Pass", "Acceptable", "Failed"],
         dataLabels: {
           enabled: true,
           style: {
