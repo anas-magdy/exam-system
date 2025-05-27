@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4 py-8">
   <!-- Teacher Profile Header -->
   <div
-    class="max-w-2xl mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800 overflow-hidden mb-8"
+    class="max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden mb-8"
   >
     <div class="md:flex">
       <div class="md:flex-shrink-0 p-6">
@@ -12,43 +12,41 @@
         />
       </div>
       <div class="p-8">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+        <h1 class="text-2xl font-bold text-gray-900">
           {{ teacher.name }}
         </h1>
-        <p class="mt-2 text-gray-600 dark:text-gray-300">{{ teacher.title }}</p>
+        <p class="mt-2 text-gray-600">{{ teacher.title }}</p>
       </div>
     </div>
   </div>
 
   <!-- Exams List -->
   <div class="max-w-2xl mx-auto">
-    <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-      Available Exams
-    </h2>
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Available Exams</h2>
 
     <div class="space-y-4">
       <div
         *ngFor="let exam of exams"
-        class="bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 p-6"
+        class="bg-white border border-gray-200 rounded-lg shadow-sm p-6"
       >
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+        <h3 class="text-lg font-medium text-gray-900">
           {{ exam.title }}
         </h3>
         <div class="mt-2 grid grid-cols-2 gap-4">
           <div>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Date</p>
-            <p class="text-gray-700 dark:text-gray-300">{{ exam.date }}</p>
+            <p class="text-sm text-gray-500">Date</p>
+            <p class="text-gray-700">{{ exam.date }}</p>
           </div>
           <div>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Duration</p>
-            <p class="text-gray-700 dark:text-gray-300">{{ exam.duration }}</p>
+            <p class="text-sm text-gray-500">Duration</p>
+            <p class="text-gray-700">{{ exam.duration }}</p>
           </div>
         </div>
-        <p class="mt-4 text-gray-600 dark:text-gray-400">
+        <p class="mt-4 text-gray-600">
           {{ exam.description }}
         </p>
         <button
-          class="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          class="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200"
         >
           Start Exam
         </button>
@@ -59,7 +57,7 @@
     <div class="mt-8">
       <button
         (click)="goBack()"
-        class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+        class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5"
       >
         Back to Teachers
       </button>

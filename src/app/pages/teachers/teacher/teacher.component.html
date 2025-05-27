@@ -1,5 +1,5 @@
 <div
-  class="w-full pt-4 mx-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
+  class="w-full pt-4 mx-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm"
 >
   <div class="flex flex-col items-center pb-5">
     <img
@@ -7,14 +7,14 @@
       [src]="imageUrl"
       [alt]="name + ' image'"
     />
-    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+    <h5 class="mb-1 text-xl font-medium text-gray-900">
       {{ name }}
     </h5>
-    <span class="text-sm text-gray-500 dark:text-gray-400">{{ title }}</span>
+    <span class="text-sm text-gray-500">{{ title }}</span>
     <div class="flex mt-2 md:mt-3">
       <button
         (click)="onViewExams()"
-        class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200"
       >
         View Exams
       </button>
