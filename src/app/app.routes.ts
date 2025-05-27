@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
 import { AllTeacherExamsComponent } from './pages/teachers/teacher-exams/all-teacher-exams.component';
-import { TeacherExamsComponent } from './pages/exams/teacher-exams/teacher-exams.component';
+
+import { ExamStartComponent } from './pages/exams/exam-start/exam-start.component';
+import { ExamQuestionsComponent } from './pages/exams/exam-questions/exam-questions.component';
+import { ExamResultComponent } from './pages/exams/exam-result/exam-result.component';
 
 export const routes: Routes = [
-
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'home',
@@ -18,6 +20,18 @@ export const routes: Routes = [
       ),
   },
   { path: 'teachers/:teacherId/exams', component: AllTeacherExamsComponent },
+  {
+    path: 'exam/:examId/start',
+    component: ExamStartComponent,
+  },
+  {
+    path: 'exam/questions',
+    component: ExamQuestionsComponent,
+  },
+  {
+    path: 'exam-result/:examId',
+    component: ExamResultComponent,
+  },
   {
     path: 'login',
     loadComponent: () =>
@@ -44,5 +58,4 @@ export const routes: Routes = [
         (m) => m.ViewResultComponent
       ),
   },
-
 ];
