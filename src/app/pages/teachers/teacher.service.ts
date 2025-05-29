@@ -282,6 +282,7 @@ export class TeacherService {
       ],
     },
   ];
+
   constructor() {}
 
   // الحصول على جميع المدرسين
