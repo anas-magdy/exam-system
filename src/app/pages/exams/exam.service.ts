@@ -17,7 +17,7 @@ export class ExamService {
       id: '1',
       title: 'Midterm Exam',
       description: 'Covers chapters 1-5',
-      duration: 90, // 90 minutes
+      duration: 90, // minutes
       teacherId: '1',
       questions: [
         {
@@ -32,7 +32,138 @@ export class ExamService {
           correctAnswer: 1,
           points: 10,
         },
-        // Add more questions...
+        {
+          id: '2',
+          text: 'Which decorator is used to define a component in Angular?',
+          options: ['@Component', '@NgModule', '@Directive', '@Injectable'],
+          correctAnswer: 0,
+          points: 15,
+        },
+        {
+          id: '3',
+          text: 'What is data binding in Angular?',
+          options: [
+            'A way to connect application data with DOM',
+            'A database connection method',
+            'A type of HTTP request',
+            'A security protocol',
+          ],
+          correctAnswer: 0,
+          points: 12,
+        },
+        {
+          id: '4',
+          text: 'Which of these is NOT a lifecycle hook?',
+          options: ['ngOnInit', 'ngOnChanges', 'ngDoCheck', 'ngRender'],
+          correctAnswer: 3,
+          points: 10,
+        },
+        {
+          id: '5',
+          text: 'What does RxJS stand for?',
+          options: [
+            'Reactive Extensions for JavaScript',
+            'React JavaScript Syntax',
+            'Runtime XML JavaScript',
+            'Remote XHR JavaScript Service',
+          ],
+          correctAnswer: 0,
+          points: 8,
+        },
+      ],
+    },
+    {
+      id: '2',
+      title: 'Final Exam',
+      description: 'Comprehensive exam covering all chapters',
+      duration: 120,
+      teacherId: '1',
+      questions: [
+        {
+          id: '6',
+          text: 'What is the purpose of Angular services?',
+          options: [
+            'To create components',
+            'To share data and logic across components',
+            'To define routes',
+            'To create templates',
+          ],
+          correctAnswer: 1,
+          points: 15,
+        },
+        {
+          id: '7',
+          text: 'How do you generate a new service in Angular CLI?',
+          options: [
+            'ng generate component service-name',
+            'ng generate service service-name',
+            'ng create service service-name',
+            'ng new service service-name',
+          ],
+          correctAnswer: 1,
+          points: 10,
+        },
+      ],
+    },
+    {
+      id: '3',
+      title: 'React Basics Test',
+      description: 'JSX and Components fundamentals',
+      duration: 60,
+      teacherId: '2',
+      questions: [
+        {
+          id: '8',
+          text: 'What is JSX?',
+          options: [
+            'A JavaScript testing framework',
+            'JavaScript XML syntax extension',
+            'A state management library',
+            'A build tool for React',
+          ],
+          correctAnswer: 1,
+          points: 12,
+        },
+        {
+          id: '9',
+          text: 'In React, props are:',
+          options: [
+            'Mutable within the component',
+            'Used to store internal state',
+            'Passed from parent to child components',
+            'Only for class components',
+          ],
+          correctAnswer: 2,
+          points: 15,
+        },
+      ],
+    },
+    {
+      id: '4',
+      title: 'Vue.js Fundamentals',
+      description: 'Basic concepts of Vue.js',
+      duration: 75,
+      teacherId: '3',
+      questions: [
+        {
+          id: '10',
+          text: 'Which Vue directive is used for conditional rendering?',
+          options: ['v-for', 'v-if', 'v-bind', 'v-model'],
+          correctAnswer: 1,
+          points: 10,
+        },
+        {
+          id: '11',
+          text: 'What is the correct way to create a Vue instance?',
+          options: [
+            'new Vue({ /* options */ })',
+            'Vue.create({ /* options */ })',
+            'Vue.component({ /* options */ })',
+            'Vue.instantiate({ /* options */ })',
+          ],
+          correctAnswer: 0,
+          points: 12,
+        },
       ],
     },
   ];

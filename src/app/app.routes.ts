@@ -40,6 +40,7 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () =>
+
       import('./Core/Register/Register.component').then(
         (m) => m.RegisterComponent
       ),
