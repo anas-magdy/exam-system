@@ -41,7 +41,7 @@ export const routes: Routes = [
     path: 'register',
     loadComponent: () =>
       import('./Core/Regestaer/Regestaer.component').then(
-        (m) => m.RegestaerComponent
+        (m) => m.RegisterComponent
       ),
   },
   {
