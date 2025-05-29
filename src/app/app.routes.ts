@@ -40,7 +40,8 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () =>
-      import('./Core/Regestaer/Regestaer.component').then(
+
+      import('./Core/Register/Register.component').then(
         (m) => m.RegisterComponent
       ),
   },
@@ -57,5 +58,11 @@ export const routes: Routes = [
       import('./pages/viewResult/viewResult.component').then(
         (m) => m.ViewResultComponent
       ),
-  },
+  }, {
+    path: 'teacherViewExams',
+    loadComponent: () =>
+      import('./pages/teacherView/teacherView.component').then(
+        (m) => m.TeacherViewComponent
+      )
+  }
 ];
