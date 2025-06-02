@@ -38,7 +38,7 @@
           id="teacher-search"
           type="search"
           [(ngModel)]="searchQuery"
-          (input)="currentPage = 1"
+          (input)="onSearchChange()"
           class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-green-500 focus:border-green-500"
           placeholder="Search by teacher name..."
         />
@@ -51,7 +51,7 @@
         <select
           id="specialization-filter"
           [(ngModel)]="selectedTitle"
-          (change)="currentPage = 1"
+          (change)="onFilterChange()"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
         >
           <option value="">All Specializations</option>
@@ -76,9 +76,9 @@
   >
     <app-teacher
       *ngFor="let teacher of teachers"
-      [name]="teacher.name"
-      [title]="teacher.title"
-      [imageUrl]="teacher.imageUrl"
+      [name]="teacher.user.name"
+      [title]="teacher.user.role"
+      [imageUrl]="teacher.idCardImage.secure_url"
       [teacherId]="teacher.id"
       (viewExams)="viewTeacherExams($event)"
     ></app-teacher>
@@ -127,7 +127,7 @@
         <button
           (click)="changePage(currentPage - 1)"
           [disabled]="currentPage === 1"
-          class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700"
+          class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span class="sr-only">Previous</span>
           <svg
@@ -166,7 +166,7 @@
         <button
           (click)="changePage(currentPage + 1)"
           [disabled]="currentPage === totalPages"
-          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700"
+          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span class="sr-only">Next</span>
           <svg

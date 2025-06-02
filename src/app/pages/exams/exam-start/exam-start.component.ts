@@ -27,7 +27,7 @@ export class ExamStartComponent implements OnInit {
     // Load exam details
     this.exam = this.examService.getExamDetails(this?.examId);
     // Load teacher details
-    this.teacher = this.teacherService.getTeacherById(this.exam?.teacherId);
+    // this.teacher = this.teacherService.getTeacherById(this.exam?.teacherId);
     // في دالة ngOnInit
     this.exam = this.examService.getExamDetails(this?.examId);
   }

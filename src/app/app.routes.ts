@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { AllTeacherExamsComponent } from './pages/teachers/teacher-exams/all-teacher-exams.component';
+import { AllTeacherExamsComponent } from './pages/teachers/teacher-exams/teacher-exams.component';
 
 import { ExamStartComponent } from './pages/exams/exam-start/exam-start.component';
 import { ExamQuestionsComponent } from './pages/exams/exam-questions/exam-questions.component';
@@ -20,18 +20,18 @@ export const routes: Routes = [
       ),
   },
   { path: 'teachers/:teacherId/exams', component: AllTeacherExamsComponent },
-  {
-    path: 'exam/:examId/start',
-    component: ExamStartComponent,
-  },
-  {
-    path: 'exam/questions',
-    component: ExamQuestionsComponent,
-  },
-  {
-    path: 'exam-result/:examId',
-    component: ExamResultComponent,
-  },
+  // {
+  //   path: 'exam/:examId/start',
+  //   component: ExamStartComponent,
+  // },
+  // {
+  //   path: 'exam/questions',
+  //   component: ExamQuestionsComponent,
+  // },
+  // {
+  //   path: 'exam-result/:examId',
+  //   component: ExamResultComponent,
+  // },
   {
     path: 'login',
     loadComponent: () =>
@@ -40,7 +40,6 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () =>
-
       import('./Core/Register/Register.component').then(
         (m) => m.RegisterComponent
       ),
@@ -58,11 +57,12 @@ export const routes: Routes = [
       import('./pages/viewResult/viewResult.component').then(
         (m) => m.ViewResultComponent
       ),
-  }, {
+  },
+  {
     path: 'teacherViewExams',
     loadComponent: () =>
       import('./pages/teacherView/teacherView.component').then(
         (m) => m.TeacherViewComponent
-      )
-  }
+      ),
+  },
 ];

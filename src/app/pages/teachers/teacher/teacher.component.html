@@ -1,37 +1,43 @@
 <div
-  class="w-full h-full mx-auto bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+  class="w-full max-w-sm mx-auto bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200"
 >
-  <div class="flex flex-col items-center p-6">
+  <div class="flex flex-col items-center p-6 text-center">
     <img
-      class="w-24 h-24 mb-4 rounded-full shadow-lg object-cover border-2 border-green-100"
-      [src]="imageUrl"
+      class="w-24 h-24 mb-4 rounded-full shadow-md object-cover border-4 border-green-100"
+      [src]="displayImageUrl"
       [alt]="name + ' profile image'"
+      (error)="onImageError($event)"
+      loading="lazy"
     />
-    <h5 class="mb-1 text-lg font-semibold text-gray-900 text-center">
+
+    <h5
+      class="text-lg font-semibold capitalize text-gray-900 mb-1 truncate max-w-full"
+    >
       {{ name }}
     </h5>
-    <span class="text-sm text-gray-500 text-center">{{ title }}</span>
-    <div class="flex mt-4">
-      <button
-        (click)="onViewExams()"
-        class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200 transition-colors duration-200"
+    <span class="text-sm text-gray-500 truncate max-w-full">{{ title }}</span>
+
+    <button
+      (click)="onViewExams()"
+      class="mt-5 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200 transition-colors duration-200 disabled:opacity-50"
+      [disabled]="!teacherId"
+      [attr.aria-label]="'View exams for ' + name"
+    >
+      View Exams
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-4 h-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
       >
-        View Exams
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="ml-2 -mr-1 w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
-      </button>
-    </div>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </button>
   </div>
 </div>

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { TeacherComponent } from './teacher/teacher.component';
-import { AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { TeacherService } from './teacher.service';
+import { Teacher } from '../../models/Teacher.model';
+import { filter } from 'rxjs/operators';
 
 declare var window: any;
 
@@ -15,11 +16,37 @@ declare var window: any;
   templateUrl: './teachers.component.html',
   styleUrl: './teachers.component.css',
 })
-export class TeachersComponent implements AfterViewInit {
-  constructor(
-    private router: Router,
-    private teacherService: TeacherService // حقن الخدمة
-  ) {}
+export class TeachersComponent implements AfterViewInit, OnInit {
+  allTeachers: Teacher[] = [];
+  filteredTeachers: Teacher[] = [];
+
+  constructor(private router: Router, private teacherService: TeacherService) {}
+
+  currentPage = 1;
+  itemsPerPage = 8;
+  searchQuery = '';
+  selectedTitle = '';
+
+  ngOnInit(): void {
+    this.loadTeachers();
+
+    // ✅ تحميل البيانات كل مرة ترجع للصفحة
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.loadTeachers();
+      });
+  }
+
+  loadTeachers(): void {
+    this.teacherService.getAllTeachers().subscribe({
+      next: (teachers) => {
+        this.allTeachers = teachers;
+        this.filteredTeachers = [...teachers];
+      },
+      error: (err) => console.error('Error loading teachers:', err),
+    });
+  }
 
   ngAfterViewInit(): void {
     if (window?.Flowbite?.initDropdowns) {
@@ -27,22 +54,38 @@ export class TeachersComponent implements AfterViewInit {
     }
   }
 
-  currentPage = 1;
-  itemsPerPage = 8;
-  searchQuery = '';
-  selectedTitle = '';
-
-  // الحصول على عناوين المدرسين من الخدمة
-  get titles() {
-    return this.teacherService.getTeacherTitles();
+  // استخراج الأدوار من idCardData
+  get titles(): string[] {
+    const uniqueTitles = [
+      ...new Set(this.allTeachers.map((t) => t.idCardData?.role)),
+    ];
+    return uniqueTitles.filter((title) => title);
   }
 
-  // تصفية المدرسين باستخدام الخدمة
-  get filteredTeachers() {
-    return this.teacherService.searchTeachers(
-      this.searchQuery,
-      this.selectedTitle
-    );
+  filterTeachers(): void {
+    this.filteredTeachers = this.allTeachers.filter((teacher) => {
+      const matchesSearch =
+        !this.searchQuery.trim() ||
+        teacher.idCardData?.doctorName
+          ?.toLowerCase()
+          .includes(this.searchQuery.toLowerCase().trim());
+
+      const matchesRole =
+        !this.selectedTitle.trim() ||
+        teacher.idCardData?.role === this.selectedTitle;
+
+      return matchesSearch && matchesRole;
+    });
+
+    this.currentPage = 1;
+  }
+
+  onSearchChange(): void {
+    this.filterTeachers();
+  }
+
+  onFilterChange(): void {
+    this.filterTeachers();
   }
 
   get teachers() {
@@ -79,6 +122,7 @@ export class TeachersComponent implements AfterViewInit {
   resetFilters() {
     this.searchQuery = '';
     this.selectedTitle = '';
+    this.filteredTeachers = [...this.allTeachers];
     this.currentPage = 1;
   }
 

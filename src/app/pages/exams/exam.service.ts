@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Exam, Question } from './exam.model';
+import { Exam, Question } from '../../models/exam.model';
 import { ExamResult } from './exam-result.model';
 import { BehaviorSubject, timer, takeUntil } from 'rxjs';
 
