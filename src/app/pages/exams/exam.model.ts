@@ -1,8 +1,16 @@
+// exam.model.ts
+export interface Teacher {
+  id: string;
+  name: string;
+  title: string;
+  imageUrl: string;
+}
+
 export interface Question {
   id: string;
   text: string;
   options: string[];
-  correctAnswer: number; // index of the correct option
+  correctAnswer: number;
   points: number;
 }
 
@@ -11,8 +19,16 @@ export interface Exam {
   title: string;
   description: string;
   duration: number; // in minutes
-  questions: Question[];
   teacherId: string;
-  startTime?: Date; // will be set when exam starts
-  endTime?: Date; // will be set when exam starts
+  questions: Question[];
+}
+
+export interface ExamResult {
+  examId: string;
+  studentId: string;
+  answers: number[];
+  score: number;
+  totalScore: number;
+  percentage: number;
+  submittedAt: Date;
 }
