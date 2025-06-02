@@ -10,26 +10,26 @@
     <label class="block text-sm font-medium text-gray-700">Register As</label>
     <div class="flex space-x-4">
       <button
-        type="button"
-        [class.bg-green-600]="userType === 'student'"
-        [class.bg-gray-200]="userType !== 'student'"
-        [class.text-white]="userType === 'student'"
-        [class.text-gray-700]="userType !== 'student'"
-        class="px-6 py-3 rounded-md font-medium transition-colors duration-200 flex-1"
-        (click)="onUserTypeChange('student')"
-      >
-        Student
-      </button>
+    type="button"
+    [class.bg-green-600]="userType === 'TEACHER'"
+    [class.bg-gray-200]="userType !== 'TEACHER'"
+    [class.text-white]="userType === 'TEACHER'"
+    [class.text-gray-700]="userType !== 'TEACHER'"
+    class="px-6 py-3 rounded-md font-medium transition-colors duration-200 flex-1"
+    (click)="onUserTypeChange('TEACHER')"
+  >
+    Teacher
+  </button>
       <button
         type="button"
-        [class.bg-green-600]="userType === 'teacher'"
-        [class.bg-gray-200]="userType !== 'teacher'"
-        [class.text-white]="userType === 'teacher'"
-        [class.text-gray-700]="userType !== 'teacher'"
+        [class.bg-green-600]="userType === 'STUDENT'"
+        [class.bg-gray-200]="userType !== 'STUDENT'"
+        [class.text-white]="userType === 'STUDENT'"
+        [class.text-gray-700]="userType !== 'STUDENT'"
         class="px-6 py-3 rounded-md font-medium transition-colors duration-200 flex-1"
-        (click)="onUserTypeChange('teacher')"
+        (click)="onUserTypeChange('STUDENT')"
       >
-        Teacher
+        Student
       </button>
     </div>
   </div>
@@ -110,16 +110,16 @@
   </div>
 
   <!-- Teacher Specific Fields -->
-  <div *ngIf="userType === 'teacher'" class="space-y-6 border-t pt-6">
+  <div *ngIf="userType === 'TEACHER'" class="space-y-6 border-t pt-6">
     <h3 class="text-lg font-medium text-gray-800">Teacher Information</h3>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="space-y-2">
-        <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
+        <label for="subjectName" class="block text-sm font-medium text-gray-700">subjectName</label>
         <input
           type="text"
-          id="subject"
-          formControlName="subject"
+          id="subjectName"
+          formControlName="subjectName"
           placeholder="What do you teach?"
           class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-colors duration-200"
         >
@@ -134,7 +134,7 @@
           accept="image/*"
           class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-colors duration-200"
         >
-        <div *ngIf="!nationalIdImage && registerForm.get('userType')?.value === 'teacher' && formSubmitted" class="text-red-500 text-xs">
+        <div *ngIf="!idCardImage  && registerForm.get('userType')?.value === 'teacher' && formSubmitted" class="text-red-500 text-xs">
           National ID image is required for teachers
         </div>
       </div>
