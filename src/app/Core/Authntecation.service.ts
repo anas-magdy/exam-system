@@ -7,8 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService  {
-  private apiUrl = 'YOUR_API_ENDPOINT'; // Replace with your API endpoint
-
+  private apiUrl = 'https://exam-management-sys-beta.vercel.app/api/v1/auth';
   constructor(private http: HttpClient) { }
 
   login(credentials: { email: string; password: string }): Observable<any> {
