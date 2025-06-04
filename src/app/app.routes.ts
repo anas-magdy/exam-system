@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 
 import { ExamQuestionsComponent } from './pages/exams/exam-questions/exam-questions.component';
 import { TeacherExamsComponent } from './pages/teachers/teacher-exams/teacher-exams.component';
+import path from 'path';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -54,7 +55,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'view-quiz/:id',
+    path: 'view-quiz/:id/:length',
     loadComponent: () =>
       import('./pages/viewResult/viewResult.component').then(
         (m) => m.ViewResultComponent
@@ -67,4 +68,10 @@ export const routes: Routes = [
         (m) => m.TeacherViewComponent
       ),
   },
+  {
+    path: 'editQuiz/:id',
+    loadComponent: () =>
+      import('./pages/EditQuiz/EditQuiz.component').then((m) => m.EditQuizComponent)
+  }
+  
 ];
