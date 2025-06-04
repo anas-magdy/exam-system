@@ -18,3 +18,5 @@ export class TeacherComponent {
     this.viewExams.emit(this.teacherId); // ترسل teacherId للمكون الأب
   }
 }
+
+
