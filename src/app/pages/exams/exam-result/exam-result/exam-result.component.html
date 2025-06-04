@@ -1,0 +1,46 @@
+<div *ngIf="exam" class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold text-green-600 mb-2">
+      {{ exam.title }} - Result
+    </h2>
+    <div class="inline-block px-6 py-3 bg-green-100 rounded-full">
+      <p class="text-xl font-semibold text-green-800">
+        Score: <span class="font-bold">{{ score }}</span> /
+        <span>{{ total }}</span>
+        (<span class="font-bold">{{ percentage }}%</span>)
+      </p>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    <div
+      *ngFor="let q of exam.questions; index as i"
+      class="p-5 border rounded-lg transition-all hover:shadow-md"
+      [class.bg-green-50]="userAnswers[i] === q.correctAnswer"
+    >
+      <h4 class="text-xl font-semibold mb-3 text-gray-800">
+        Q{{ i + 1 }}: {{ q.text }}
+      </h4>
+      <ul class="space-y-2">
+        <li
+          *ngFor="let opt of q.options; index as j"
+          class="p-3 rounded-md flex items-center"
+          [class.bg-green-100]="j === q.correctAnswer"
+          [class.border-l-4]="j === q.correctAnswer || j === userAnswers[i]"
+          [class.border-green-500]="j === q.correctAnswer"
+          [class.border-red-500]="j === userAnswers[i] && j !== q.correctAnswer"
+        >
+          <span class="flex-grow">{{ opt.option }}</span>
+          <span *ngIf="j === q.correctAnswer" class="ml-2 text-green-700"
+            >✅ Correct answer</span
+          >
+          <span
+            *ngIf="j === userAnswers[i] && j !== q.correctAnswer"
+            class="ml-2 text-red-600"
+            >❌ Your answer</span
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
