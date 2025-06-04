@@ -119,7 +119,11 @@ export class TeachersComponent implements AfterViewInit, OnInit {
 
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
-
+  showPageDots(page: number): boolean {
+    const pages = this.getPageNumbers();
+    const index = pages.indexOf(page);
+    return index > 0 && pages[index] - pages[index - 1] > 1;
+  }
   resetFilters() {
     this.searchQuery = '';
     this.selectedSubject = '';

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ExamService } from './../../exam.service';
 import { Exam } from '../../exam.model';
+import { Router } from '@angular/router'; // ✅ import Router
 
 @Component({
   selector: 'app-exam-result',
@@ -21,7 +22,8 @@ export class ExamResultComponent implements OnInit {
 
   constructor(
     private examService: ExamService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router // ✅ Inject Router
   ) {}
 
   ngOnInit() {
@@ -41,5 +43,8 @@ export class ExamResultComponent implements OnInit {
         this.exam = exam;
       });
     });
+  }
+  goToTeachers() {
+    this.router.navigate(['/teachers']);
   }
 }
