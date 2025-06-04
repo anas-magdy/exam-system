@@ -1,16 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { QuestionComponent } from './Question/Question.component';
 import { IQuestion, QuizService } from '../Quize.service';
-
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-QuizQuistions',
   templateUrl: './QuizQuistions.component.html',
   styleUrls: ['./QuizQuistions.component.css'],
-  imports: [QuestionComponent]
+  imports: [QuestionComponent, FormsModule]
 
 })
 export class QuizQuistionsComponent implements OnInit {
   @Input() questions !: IQuestion[]
+  @Input() quizName: string = ""
+  duration: string = ""
+  grade!: Number 
   constructor(private _quizService: QuizService) { }
 
   ngOnInit() {
@@ -20,18 +23,29 @@ export class QuizQuistionsComponent implements OnInit {
     this.questions = [
       ...this.questions,
       {
-        question: '',
-        Choices: [
-          { key: "A", value: "" },
-          { key: "B", value: "" }
+        theQuestion: "",
+        options: [
+          { key: "A", option: "", isCorrect: false },
+          { key: "B", option: "", isCorrect: false },
         ],
-        correct: ''
-      }
+      },
     ];
     console.log(this.questions);
   }
   handelOnSubmit() {
-    this._quizService.quiz.questions = this.questions
-    console.log(this._quizService.quiz)
+    this._quizService.quiz.name = this.quizName;
+    this._quizService.quiz.questions = this.questions;
+    this._quizService.quiz.duration = this.duration;
+    this._quizService.quiz.grade=this.grade
+    this._quizService.submitQuiz(this._quizService.quiz).subscribe({
+      next: (res) => {
+        console.log('Quiz submitted successfully:', res);
+        alert('Quiz submitted successfully!');
+      },
+      error: (err) => {
+        console.error('Submission error:', err);
+        alert('Failed to submit quiz.');
+      }
+    });
   }
 }

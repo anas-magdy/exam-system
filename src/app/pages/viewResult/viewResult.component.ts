@@ -17,7 +17,7 @@ export class ViewResultComponent implements AfterViewInit {
       const ApexCharts = (await import('apexcharts')).default;
       const chartOptions = {
         series: [80.8, 1, 18.2],
-        colors: ["#16BDCA", "#F9A825", "#EA173F"],
+        colors: ["#16a34a", "#F9A825", "#EA173F"],
         chart: {
           height: 420,
           width: "100%",
