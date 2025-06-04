@@ -22,7 +22,7 @@
     <h2 class="text-xl">Quiz Questions :</h2>
   </div>
   @for (item of questions ; track $index; let i=$index) {
-  <app-Question [question]="item" [ind]="i"></app-Question>
+  <app-Question [question]="item" [ind]="i" (delete)="handleDeleteQuestion($event)"></app-Question>
   }
   <button type="button"
     class="mt-2 ml-2 p-3 rounded-lg text-white bg-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium text-sm text-center me-2 mb-2"

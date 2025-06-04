@@ -20,6 +20,9 @@ export class QuizQuistionsComponent implements OnInit {
   ngOnInit() {
     console.log("object from anas", this._quizService.quiz)
   }
+  handleDeleteQuestion(index: number) {
+    this.questions.splice(index, 1);
+  }
   handelAddQuestion() {
     this.questions = [
       ...this.questions,

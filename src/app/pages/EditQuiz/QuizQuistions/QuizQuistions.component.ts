@@ -25,6 +25,9 @@ export class QuizQuistionsComponent implements OnInit {
     this.quizId = this.route.snapshot.paramMap.get('id')
 
   }
+  handleDeleteQuestion(index: number) {
+    this.questions.splice(index, 1);
+  }
   handelAddQuestion() {
     this.questions = [
       ...this.questions,

@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { IQuestion } from '../../EditQuiz.service';
 import { CommonModule } from '@angular/common';
 @Component({
@@ -9,10 +9,13 @@ import { CommonModule } from '@angular/common';
   imports: [FormsModule, CommonModule]
 })
 export class QuestionComponent implements OnInit {
+  @Output() delete = new EventEmitter<number>();
   @Input() question!: IQuestion
   @Input() ind!: number
   constructor() { }
-
+  handleDelete() {
+    this.delete.emit(this.ind);
+  }
   ngOnInit() {
 
   }
