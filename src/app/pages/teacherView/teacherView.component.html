@@ -1,7 +1,7 @@
 <div class="containers">
   <h2 class="text-2xl font-bold mb-6 px-4">My Quizzes</h2>
 
-@if (loading) {
+  @if (loading) {
   <div class="container mx-auto mt-28">
     <div class="flex justify-center py-10">
       <!-- Flowbite spinner -->
@@ -18,8 +18,8 @@
       </div>
     </div>
   </div>
-}
-@if(!loading){
+  }
+  @if(!loading){
   <div class="container mx-auto px-4 ">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
@@ -28,7 +28,6 @@
         <div class="flex flex-col items-center py-6">
           <div
             class="bg-green-500 w-[100%] flex justify-center items-center rounded-lg text-white p-6 h-[150px] relative">
-            <i class="fa-solid fa-eye absolute top-2 right-3 cursor-pointer"></i>
             <i class="fas fa-terminal fa-2x"></i>
           </div>
 
@@ -36,13 +35,14 @@
           <span class="text-sm text-gray-500 text-center"> {{item.duration}} M </span>
           <span class="text-sm text-gray-500 text-center">{{item.grade}}</span>
           <div class="flex mt-4 md:mt-6 flex-wrap justify-center gap-2">
-            <a href="#"
+            <a [routerLink]="['/editQuiz', item.id]"
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300">
               Edit</a>
-            <a [routerLink]="'/view-quiz/{{item.id}}'"
+            <a [routerLink]="['/view-quiz', item.id, item.questions.length]"
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
               Statistics
             </a>
+
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@
 
 
       <div [routerLink]="'/add-quiz'"
-        class="w-full bg-white border-2 border-dashed border-gray-300 rounded-lg shadow-sm px-6 relative hover:border-green-500 transition-colors cursor-pointer">
+        class="w-full min-h-[300px] bg-white border-2 border-dashed border-gray-300 rounded-lg shadow-sm px-6 relative hover:border-green-500 transition-colors cursor-pointer">
         <div class="flex flex-col items-center justify-center py-6 h-full">
           <div class="bg-gray-100 w-16 h-16 rounded-full flex justify-center items-center text-gray-400 mb-4">
             <i class="fas fa-plus text-3xl"></i>
@@ -62,7 +62,7 @@
 
     </div>
   </div>
- }
+  }
 
 
 </div>

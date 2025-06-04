@@ -1,24 +1,29 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input, Input, OnInit } from '@angular/core';
 import { QuestionComponent } from './Question/Question.component';
-import { IQuestion, QuizService } from '../Quize.service';
+import { IQuestion, EditQuizService } from '../EditQuiz.service';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-QuizQuistions',
   templateUrl: './QuizQuistions.component.html',
   styleUrls: ['./QuizQuistions.component.css'],
-  imports: [QuestionComponent, FormsModule]
+  imports: [QuestionComponent, FormsModule,]
 
 })
 export class QuizQuistionsComponent implements OnInit {
   @Input() questions !: IQuestion[]
-  @Input() quizName: string = ""
-  duration: string = ""
-  grade!: Number
-  constructor(private _quizService: QuizService, private router: Router) { }
-
+  @Input() quizName!: string
+  @Input() duration!: string
+  @Input() grade!: Number
+  constructor(
+    private _EditQuizService: EditQuizService,
+    private route: ActivatedRoute,
+    private router: Router) { }
+  quizId!: any
   ngOnInit() {
-    console.log("object from anas", this._quizService.quiz)
+    this.quizId = this.route.snapshot.paramMap.get('id')
+
   }
   handelAddQuestion() {
     this.questions = [
@@ -33,12 +38,15 @@ export class QuizQuistionsComponent implements OnInit {
     ];
     console.log(this.questions);
   }
-  handelOnSubmit() {
-    this._quizService.quiz.name = this.quizName;
-    this._quizService.quiz.questions = this.questions;
-    this._quizService.quiz.duration = this.duration;
-    this._quizService.quiz.grade = Number(this.grade)
-    this._quizService.submitQuiz(this._quizService.quiz).subscribe({
+  handelOnSave() {
+    this._EditQuizService.quiz = {
+      name: this.quizName,
+      questions: this.questions,
+      duration: this.duration,
+      grade: Number(this.grade),
+    };
+
+    this._EditQuizService.editQuiz(this._EditQuizService.quiz, this.quizId).subscribe({
       next: (res) => {
         console.log('Quiz submitted successfully:', res);
         this.router.navigate(['/teacherViewExams']);

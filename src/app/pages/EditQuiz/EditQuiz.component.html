@@ -1,3 +1,14 @@
-<p>
-  EditQuiz works!
-</p>
+@if (loading) {
+  <div class="flex items-center justify-center min-h-[400px]">
+    <div class="flex flex-col items-center space-y-4">
+      <div class="w-12 h-12 border-4 border-red-500 border-dashed rounded-full animate-spin"></div>
+      <p class="text-gray-600 text-sm">Loading results, please wait...</p>
+    </div>
+  </div>
+}
+@if (!loading) {
+<div class="mx-auto mt-20 px-4 md:px-28">
+  <app-QuizQuistions [questions]="quizData.questions" [quizName]="quizData.name" [duration]="quizData.duration"
+    [grade]="quizData.grade"></app-QuizQuistions>
+</div>
+}

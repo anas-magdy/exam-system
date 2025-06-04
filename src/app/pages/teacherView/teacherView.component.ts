@@ -34,10 +34,12 @@ export class TeacherViewComponent implements OnInit {
       next: (res) => {
         this.exams = res.data.Exam
         this.loading = false;
-        console.log('Quiz submitted successfully:', this.exams);
+        console.log(res.data)
+       
         
       },
       error: (err) => {
+        this.loading=false
         console.error('Submission error:', err);
       
       }
