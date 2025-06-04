@@ -1,7 +1,8 @@
 import { FormsModule } from '@angular/forms';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output ,EventEmitter} from '@angular/core';
 import { IQuestion } from '../../Quize.service';
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-Question',
   templateUrl: './Question.component.html',
@@ -11,12 +12,15 @@ import { CommonModule } from '@angular/common';
 export class QuestionComponent implements OnInit {
   @Input() question!: IQuestion
   @Input() ind!: number
+  @Output() delete = new EventEmitter<number>();
   constructor() { }
 
   ngOnInit() {
 
   }
-
+  handleDelete() {
+    this.delete.emit(this.ind);
+  }
   get validChoice(): boolean {
     return this.question.options.length < 4 &&
       this.question.options[this.question.options.length - 1]?.option !== '';
@@ -30,6 +34,13 @@ export class QuestionComponent implements OnInit {
         isCorrect: false
       })
     }
+  }
+  deleteChoice(key: string) {
+    this.question.options = this.question.options.filter(opt => opt.key !== key);
+
+    this.question.options.forEach((opt, index) => {
+      opt.key = String.fromCharCode(65 + index);
+    });
   }
   getCorrectAnswerKey(): string | null {
     const correct = this.question.options.find(opt => opt.isCorrect);
