@@ -1,8 +1,0 @@
-{
-  "/api": {
-    "target": "https://exam-management-sys-beta.vercel.app",
-    "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
-  }
-}

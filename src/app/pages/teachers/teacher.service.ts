@@ -1,45 +1,194 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import {
-  Teacher,
-  TeacherResponse,
-  TeacherExam,
-} from './../../models/Teacher.model';
+import { map, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+export interface Teacher {
+  id: string;
+  userId: string;
+  subjectName: string;
+  idCardImage: {
+    public_id: string;
+    secure_url: string;
+  };
+  idCardData: {
+    role: string;
+    syndicate: string;
+    doctorName: string;
+    expiryDate: string;
+    secretaryGeneral: string;
+  };
+  status: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    age: number;
+    role: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  exams?: Exam[]; // إضافة خاصية اختيارية للامتحانات
+}
+
+export interface Exam {
+  id: string;
+  name: string;
+  teacherId: string;
+  duration?: string; // أو number لو ال API بترجع رقم
+  grade?: number;
+  questions: {
+    id: string;
+    theQuestion: string;
+    examId: string;
+    options: {
+      id: string;
+      option: string;
+      key: string;
+      isCorrect: boolean;
+      questionId: string;
+    }[];
+  }[];
+  questionsCount?: number;
+}
+
+export interface TeacherWithExams {
+  id: string;
+  user: {
+    name: string;
+    // باقي خصائص المستخدم
+  };
+  idCardImage: {
+    secure_url: string;
+  };
+  subjectName: string;
+  Exam: Exam[];
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class TeacherService {
-  private apiUrl = 'https://exam-management-sys-beta.vercel.app/api/v1';
-  // private apiUrl = '/api/api/v1';
+  private apiUrl =
+    'https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/teacher';
+  private cachedTeachers: Teacher[] = [];
 
   constructor(private http: HttpClient) {}
 
-  // جلب جميع المعلمين
   getAllTeachers(): Observable<Teacher[]> {
-    return this.http
-      .get<TeacherResponse>(`${this.apiUrl}/teacher`)
-      .pipe(map((response) => response.data));
-  }
+    if (this.cachedTeachers.length > 0) {
+      return of(this.cachedTeachers);
+    }
 
-  // جلب بيانات معلم محدد بالـ ID
-  getTeacherById(teacherId: string): Observable<Teacher> {
     return this.http
-      .get<{ message: string; data: Teacher }>(
-        `${this.apiUrl}/teacher/${teacherId}`
-      )
-      .pipe(map((response) => response.data));
-  }
-
-  // جلب امتحانات معلم محدد - الآن من teacher response نفسه
-  getTeacherExams(teacherId: string): Observable<TeacherExam[]> {
-    return this.http
-      .get<{ data: TeacherExam[] }>(`${this.apiUrl}/teacher/${teacherId}/exams`)
+      .get<{ message: string; data: Teacher[] }>(this.apiUrl)
       .pipe(
-        map((response) => response.data || []),
-        catchError(() => of([])) // في حالة الخطأ نرجع مصفوفة فارغة
+        map((response) => {
+          this.cachedTeachers = response.data;
+          return response.data;
+        })
       );
+  }
+
+  searchTeachers(
+    query: string,
+    subjectFilter: string = ''
+  ): Observable<Teacher[]> {
+    if (this.cachedTeachers.length > 0) {
+      const filteredTeachers = this.cachedTeachers.filter((teacher) => {
+        const matchesSearch = teacher.user.name
+          .toLowerCase()
+          .includes(query.toLowerCase());
+        const matchesSubject =
+          !subjectFilter || teacher.subjectName === subjectFilter;
+        return matchesSearch && matchesSubject;
+      });
+      return of(filteredTeachers);
+    }
+
+    return this.getAllTeachers().pipe(
+      map((teachers) =>
+        teachers.filter((teacher) => {
+          const matchesSearch = teacher.user.name
+            .toLowerCase()
+            .includes(query.toLowerCase());
+          const matchesSubject =
+            !subjectFilter || teacher.subjectName === subjectFilter;
+          return matchesSearch && matchesSubject;
+        })
+      )
+    );
+  }
+
+  getTeacherById(id: string): Observable<Teacher | undefined> {
+    return this.getAllTeachers().pipe(
+      map((teachers) => teachers.find((teacher) => teacher.id === id))
+    );
+  }
+
+  getTeacherExams(teacherId: string): Observable<any[]> {
+    return this.http
+      .get<{ message: string; data: any }>(`${this.apiUrl}/${teacherId}/exams`)
+      .pipe(
+        map((response) => response.data.Exam || []) // نأخذ مصفوفة Exam من البيانات
+      );
+  }
+
+  getTeacherExamCount(teacherId: string): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/${teacherId}/exams/count`);
+  }
+  getTeacherSubjects(): Observable<string[]> {
+    return this.getAllTeachers().pipe(
+      map((teachers) => [
+        ...new Set(teachers.map((teacher) => teacher.subjectName)),
+      ])
+    );
+  }
+
+  getTeacherWithExams(teacherId: string): Observable<TeacherWithExams> {
+    return this.http
+      .get<{ message: string; data: TeacherWithExams }>(
+        `${this.apiUrl}/${teacherId}/exams`
+      )
+      .pipe(
+        map((response) => {
+          const teacherData = response.data;
+          teacherData.Exam = teacherData.Exam.map((exam) => ({
+            ...exam,
+            questionsCount: exam.questions.length,
+          }));
+          return teacherData;
+        }),
+        catchError((error) => {
+          if (
+            error.error &&
+            error.error.message === 'teacher exams not exist'
+          ) {
+            // بدل رمي الخطأ، رجع بيانات 'لا يوجد امتحانات' بشكل طبيعي
+            return of({
+              id: '',
+              user: { name: '' },
+              idCardImage: { secure_url: '' },
+              subjectName: '',
+              Exam: [],
+            });
+          }
+
+          let errorMessage = 'حدث خطأ أثناء تحميل الامتحانات';
+
+          if (error.error && error.error.message) {
+            errorMessage = error.error.message;
+          }
+
+          return throwError(() => new Error(errorMessage));
+        })
+      );
+  }
+
+  // دالة لتحديث البيانات المخزنة إذا لزم الأمر
+  refreshTeachers(): Observable<Teacher[]> {
+    this.cachedTeachers = [];
+    return this.getAllTeachers();
   }
 }

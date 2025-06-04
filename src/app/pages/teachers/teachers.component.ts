@@ -1,11 +1,11 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TeacherComponent } from './teacher/teacher.component';
+import { AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { TeacherService } from './teacher.service';
-import { Teacher } from '../../models/Teacher.model';
-import { filter } from 'rxjs/operators';
+import { Teacher } from './teacher.service';
 
 declare var window: any;
 
@@ -17,36 +17,7 @@ declare var window: any;
   styleUrl: './teachers.component.css',
 })
 export class TeachersComponent implements AfterViewInit, OnInit {
-  allTeachers: Teacher[] = [];
-  filteredTeachers: Teacher[] = [];
-
   constructor(private router: Router, private teacherService: TeacherService) {}
-
-  currentPage = 1;
-  itemsPerPage = 8;
-  searchQuery = '';
-  selectedTitle = '';
-
-  ngOnInit(): void {
-    this.loadTeachers();
-
-    // ✅ تحميل البيانات كل مرة ترجع للصفحة
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.loadTeachers();
-      });
-  }
-
-  loadTeachers(): void {
-    this.teacherService.getAllTeachers().subscribe({
-      next: (teachers) => {
-        this.allTeachers = teachers;
-        this.filteredTeachers = [...teachers];
-      },
-      error: (err) => console.error('Error loading teachers:', err),
-    });
-  }
 
   ngAfterViewInit(): void {
     if (window?.Flowbite?.initDropdowns) {
@@ -54,38 +25,32 @@ export class TeachersComponent implements AfterViewInit, OnInit {
     }
   }
 
-  // استخراج الأدوار من idCardData
-  get titles(): string[] {
-    const uniqueTitles = [
-      ...new Set(this.allTeachers.map((t) => t.idCardData?.role)),
-    ];
-    return uniqueTitles.filter((title) => title);
+  examCounts: { [key: string]: number } = {};
+
+  ngOnInit() {
+    this.loadTeachers();
+    this.loadExamCounts();
   }
 
-  filterTeachers(): void {
-    this.filteredTeachers = this.allTeachers.filter((teacher) => {
-      const matchesSearch =
-        !this.searchQuery.trim() ||
-        teacher.idCardData?.doctorName
-          ?.toLowerCase()
-          .includes(this.searchQuery.toLowerCase().trim());
+  currentPage = 1;
+  itemsPerPage = 8;
+  searchQuery = '';
+  selectedSubject = '';
+  allTeachers: Teacher[] = [];
+  filteredTeachers: Teacher[] = [];
+  isLoading = true;
 
-      const matchesRole =
-        !this.selectedTitle.trim() ||
-        teacher.idCardData?.role === this.selectedTitle;
-
-      return matchesSearch && matchesRole;
-    });
-
-    this.currentPage = 1;
-  }
-
-  onSearchChange(): void {
-    this.filterTeachers();
-  }
-
-  onFilterChange(): void {
-    this.filterTeachers();
+  async loadTeachers() {
+    this.isLoading = true;
+    try {
+      this.allTeachers =
+        (await this.teacherService.getAllTeachers().toPromise()) || [];
+      this.filterTeachers();
+    } catch (error) {
+      console.error('Error loading teachers:', error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   get teachers() {
@@ -96,8 +61,44 @@ export class TeachersComponent implements AfterViewInit, OnInit {
     );
   }
 
+  loadExamCounts() {
+    this.allTeachers.forEach((teacher) => {
+      this.teacherService
+        .getTeacherExamCount(teacher.id)
+        .subscribe((count) => (this.examCounts[teacher.id] = count));
+    });
+  }
+
+  getExamCount(teacherId: string): number {
+    return this.examCounts[teacherId] || 0;
+  }
   get totalPages() {
     return Math.ceil(this.filteredTeachers.length / this.itemsPerPage);
+  }
+
+  get subjects() {
+    return [
+      ...new Set(
+        this.allTeachers.map(
+          (teacher) => teacher.subjectName.toLowerCase() // تحويل لصيغة موحدة
+        )
+      ),
+    ].map((subject) => subject.charAt(0).toUpperCase() + subject.slice(1));
+  }
+  filterTeachers() {
+    this.currentPage = 1;
+    this.filteredTeachers = this.allTeachers.filter((teacher) => {
+      const matchesSearch = teacher.user.name
+        .toLowerCase()
+        .includes(this.searchQuery.toLowerCase());
+
+      const matchesSubject =
+        !this.selectedSubject ||
+        teacher.subjectName.toLowerCase() ===
+          this.selectedSubject.toLowerCase();
+
+      return matchesSearch && matchesSubject;
+    });
   }
 
   changePage(page: number) {
@@ -121,12 +122,23 @@ export class TeachersComponent implements AfterViewInit, OnInit {
 
   resetFilters() {
     this.searchQuery = '';
-    this.selectedTitle = '';
-    this.filteredTeachers = [...this.allTeachers];
-    this.currentPage = 1;
+    this.selectedSubject = '';
+    this.filterTeachers();
   }
 
   viewTeacherExams(teacherId: string) {
-    this.router.navigate(['/teachers', teacherId, 'exams']);
+    this.teacherService.getTeacherExams(teacherId).subscribe({
+      next: (exams) => {
+        this.router.navigate(['/teachers', teacherId, 'exams'], {
+          state: { exams },
+        });
+      },
+      error: (err) => {
+        console.error('❌ Error fetching exams:', err);
+        this.router.navigate(['/teachers', teacherId, 'exams'], {
+          state: { error: err.message || 'Error loading exams' },
+        });
+      },
+    });
   }
 }

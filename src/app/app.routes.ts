@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
-import { AllTeacherExamsComponent } from './pages/teachers/teacher-exams/teacher-exams.component';
+// import { AllTeacherExamsComponent } from './pages/teachers/teacher-exams/all-teacher-exams.component';
 
-import { ExamStartComponent } from './pages/exams/exam-start/exam-start.component';
 import { ExamQuestionsComponent } from './pages/exams/exam-questions/exam-questions.component';
-import { ExamResultComponent } from './pages/exams/exam-result/exam-result.component';
+import { TeacherExamsComponent } from './pages/teachers/teacher-exams/teacher-exams.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,7 +18,10 @@ export const routes: Routes = [
         (m) => m.TeachersComponent
       ),
   },
-  { path: 'teachers/:teacherId/exams', component: AllTeacherExamsComponent },
+  { path: 'teachers/:teacherId/exams', component: TeacherExamsComponent },
+  { path: 'exam/:examId', component: ExamQuestionsComponent },
+
+  // { path: 'teachers/:teacherId/exams', component: AllTeacherExamsComponent },
   // {
   //   path: 'exam/:examId/start',
   //   component: ExamStartComponent,

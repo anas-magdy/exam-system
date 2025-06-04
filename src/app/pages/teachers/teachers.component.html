@@ -8,184 +8,193 @@
 </header>
 
 <main class="container mx-auto px-4">
-  <!-- Search and Filter Section -->
-  <div
-    class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white p-4 rounded-lg shadow-sm"
-  >
-    <!-- Search Input -->
-    <div class="w-full md:w-2/5">
-      <div class="relative">
-        <div
-          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none bottom-0"
-        >
-          <svg
-            class="w-4 h-4 text-gray-500"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 20 20"
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="text-center py-12">
+    <div
+      class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600"
+    ></div>
+    <p class="mt-4 text-gray-600">Loading teachers...</p>
+  </div>
+
+  <!-- Content when loaded -->
+  <div *ngIf="!isLoading">
+    <!-- Search and Filter Section -->
+    <div
+      class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white p-4 rounded-lg shadow-sm"
+    >
+      <!-- Search Input -->
+      <div class="w-full md:w-2/5">
+        <div class="relative">
+          <div
+            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none bottom-0"
           >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-            />
-          </svg>
+            <svg
+              class="w-4 h-4 text-gray-500"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              />
+            </svg>
+          </div>
+          <input
+            id="teacher-search"
+            type="search"
+            [(ngModel)]="searchQuery"
+            (input)="filterTeachers()"
+            class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-green-500 focus:border-green-500"
+            placeholder="Search by teacher name..."
+          />
         </div>
-        <input
-          id="teacher-search"
-          type="search"
-          [(ngModel)]="searchQuery"
-          (input)="onSearchChange()"
-          class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-green-500 focus:border-green-500"
-          placeholder="Search by teacher name..."
-        />
+      </div>
+
+      <!-- Filter Dropdown -->
+      <div class="w-full md:w-2/5 flex gap-3 items-end">
+        <div class="w-full">
+          <select
+            id="subject-filter"
+            [(ngModel)]="selectedSubject"
+            (change)="filterTeachers()"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+          >
+            <option value="">All Subjects</option>
+            <option *ngFor="let subject of subjects" [value]="subject">
+              {{ subject }}
+            </option>
+          </select>
+        </div>
+
+        <button
+          (click)="resetFilters()"
+          class="px-4 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200 whitespace-nowrap"
+        >
+          Clear Filters
+        </button>
       </div>
     </div>
 
-    <!-- Filter Dropdown -->
-    <div class="w-full md:w-2/5 flex gap-3 items-end">
-      <div class="w-full">
-        <select
-          id="specialization-filter"
-          [(ngModel)]="selectedTitle"
-          (change)="onFilterChange()"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-        >
-          <option value="">All Specializations</option>
-          <option *ngFor="let title of titles" [value]="title">
-            {{ title }}
-          </option>
-        </select>
-      </div>
+    <!-- Teachers Grid -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    >
+      <app-teacher
+        *ngFor="let teacher of teachers"
+        [teacher]="teacher"
+        [examCount]="getExamCount(teacher.id)"
+        (viewExams)="viewTeacherExams($event)"
+      ></app-teacher>
+    </div>
 
+    <!-- No Results Message -->
+    <div
+      *ngIf="filteredTeachers.length === 0 && !isLoading"
+      class="text-center py-12 bg-white rounded-lg shadow-sm"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-12 w-12 mx-auto text-gray-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <h3 class="mt-2 text-lg font-medium text-gray-700">No teachers found</h3>
+      <p class="mt-1 text-gray-500 max-w-md mx-auto">
+        No teachers match your search criteria. Try adjusting your filters.
+      </p>
       <button
         (click)="resetFilters()"
-        class="px-4 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200 whitespace-nowrap"
+        class="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200"
       >
-        Clear Filters
+        Reset Filters
       </button>
     </div>
-  </div>
 
-  <!-- Teachers Grid -->
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-  >
-    <app-teacher
-      *ngFor="let teacher of teachers"
-      [name]="teacher.user.name"
-      [title]="teacher.user.role"
-      [imageUrl]="teacher.idCardImage.secure_url"
-      [teacherId]="teacher.id"
-      (viewExams)="viewTeacherExams($event)"
-    ></app-teacher>
-  </div>
-
-  <!-- No Results Message -->
-  <div
-    *ngIf="filteredTeachers.length === 0"
-    class="text-center py-12 bg-white rounded-lg shadow-sm"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-12 w-12 mx-auto text-gray-400"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
+    <!-- Pagination -->
+    <nav
+      *ngIf="filteredTeachers.length > 0"
+      aria-label="Page navigation"
+      class="flex justify-center my-4"
     >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="1.5"
-        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-    <h3 class="mt-2 text-lg font-medium text-gray-700">No teachers found</h3>
-    <p class="mt-1 text-gray-500 max-w-md mx-auto">
-      No teachers match your search criteria. Try adjusting your filters.
-    </p>
-    <button
-      (click)="resetFilters()"
-      class="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-200"
-    >
-      Reset Filters
-    </button>
+      <ul class="flex items-center -space-x-px h-10 text-base">
+        <!-- Previous Button -->
+        <li>
+          <button
+            (click)="changePage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700"
+          >
+            <span class="sr-only">Previous</span>
+            <svg
+              class="w-3 h-3 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 1 1 5l4 4"
+              />
+            </svg>
+          </button>
+        </li>
+
+        <!-- Page Numbers -->
+        <li *ngFor="let page of getPageNumbers()">
+          <button
+            (click)="changePage(page)"
+            [class.text-green-600]="currentPage === page"
+            [class.border-green-300]="currentPage === page"
+            [class.bg-green-100]="currentPage === page"
+            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+          >
+            {{ page }}
+          </button>
+        </li>
+
+        <!-- Next Button -->
+        <li>
+          <button
+            (click)="changePage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700"
+          >
+            <span class="sr-only">Next</span>
+            <svg
+              class="w-3 h-3 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 9 4-4-4-4"
+              />
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
-
-  <!-- Pagination -->
-  <nav
-    *ngIf="filteredTeachers.length > 0"
-    aria-label="Page navigation"
-    class="flex justify-center my-4"
-  >
-    <ul class="flex items-center -space-x-px h-10 text-base">
-      <!-- Previous Button -->
-      <li>
-        <button
-          (click)="changePage(currentPage - 1)"
-          [disabled]="currentPage === 1"
-          class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <span class="sr-only">Previous</span>
-          <svg
-            class="w-3 h-3 rtl:rotate-180"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 6 10"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 1 1 5l4 4"
-            />
-          </svg>
-        </button>
-      </li>
-
-      <!-- Page Numbers -->
-      <li *ngFor="let page of getPageNumbers()">
-        <button
-          (click)="changePage(page)"
-          [class.text-green-600]="currentPage === page"
-          [class.border-green-300]="currentPage === page"
-          [class.bg-green-100]="currentPage === page"
-          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-        >
-          {{ page }}
-        </button>
-      </li>
-
-      <!-- Next Button -->
-      <li>
-        <button
-          (click)="changePage(currentPage + 1)"
-          [disabled]="currentPage === totalPages"
-          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <span class="sr-only">Next</span>
-          <svg
-            class="w-3 h-3 rtl:rotate-180"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 6 10"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 9 4-4-4-4"
-            />
-          </svg>
-        </button>
-      </li>
-    </ul>
-  </nav>
 </main>
