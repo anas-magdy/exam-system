@@ -96,6 +96,52 @@ export class ExamService {
     });
   }
 
+  submitExamToApi(): void {
+    const exam = this.currentExam$.value;
+    if (!exam) return;
+
+    const localToken = localStorage.getItem('token');
+    const token =
+      localToken ||
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMyZDUwOGUyLWM5MDktNDU2My05NTI2LTQ2ZDc4MmQwOWUyMiIsInJvbGUiOiJTVFVERU5UIiwiZW1haWwiOiJzYXllZGRkQGdtYWlsLmNvbSIsImlhdCI6MTc0ODk3NTEwOSwiZXhwIjoxNzQ5NTc5OTA5fQ.snfUVJ1noAbTZU3lmRBjOdYf86RQJdT1W-0uMV_Y99s';
+
+    const headers = new HttpHeaders({
+      token: token,
+    });
+
+    const body = {
+      examId: exam.id,
+      answers: this.answers
+        .map((answerIdx, i) => {
+          const question = exam.questions[i];
+          const option = question.options[answerIdx];
+          if (!option) return null;
+          return {
+            questionId: question.id,
+            optionId: option.id,
+          };
+        })
+        .filter(Boolean), // remove nulls
+    };
+
+    this.http
+      .post(
+        'https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/student',
+        body,
+        {
+          headers,
+        }
+      )
+      .subscribe({
+        next: (res) => {
+          console.log('✅ Exam submitted successfully to API:', res);
+        },
+        error: (err) => {
+          console.error('❌ Failed to submit exam to API:', err);
+        },
+      });
+  }
+
   submitExam(answers: number[]) {
     const exam = this.currentExam$.value;
     if (!exam) return null;
@@ -123,9 +169,9 @@ export class ExamService {
     };
 
     this.saveResult(result);
+    this.submitExamToApi(); //
     return result;
   }
-
   endExam() {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();

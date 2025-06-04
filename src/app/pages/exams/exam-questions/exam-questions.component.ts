@@ -53,8 +53,8 @@ export class ExamQuestionsComponent implements OnInit, OnDestroy {
   // دالة التسليم (يدوي أو تلقائي)
   submitExam(autoSubmit: boolean = false) {
     if (autoSubmit || confirm('Are you sure you want to submit your exam?')) {
-      const result = this.examService.submitExam(this.answers);
-
+      const result = this.examService.submitExam(this.answers); // ✅ send answers to the service
+      console.log(result);
       if (this.exam) {
         this.router.navigate(['/exam-result', this.exam.id]);
       }
