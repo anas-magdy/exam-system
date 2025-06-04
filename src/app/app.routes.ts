@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
+
 // import { AllTeacherExamsComponent } from './pages/teachers/teacher-exams/all-teacher-exams.component';
 import { ExamQuestionsComponent } from './pages/exams/exam-questions/exam-questions.component';
 import { TeacherExamsComponent } from './pages/teachers/teacher-exams/teacher-exams.component';
 import { ExamResultComponent } from './pages/exams/exam-result/exam-result/exam-result.component';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,7 +22,6 @@ export const routes: Routes = [
   },
   { path: 'teachers/:teacherId/exams', component: TeacherExamsComponent },
   { path: 'exam/:examId', component: ExamQuestionsComponent },
-
   {
     path: 'exam-result/:id',
     component: ExamResultComponent,
