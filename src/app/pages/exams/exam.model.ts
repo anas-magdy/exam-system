@@ -6,29 +6,27 @@ export interface Teacher {
   imageUrl: string;
 }
 
+export interface Option {
+  id: string;
+  option: string;
+  key: string;
+  isCorrect: boolean;
+  questionId: string;
+}
+
 export interface Question {
   id: string;
   text: string;
-  options: string[];
-  correctAnswer: number;
+  options: Option[]; // بدل string[] هنا كائنات Option
+  correctAnswer: number; // ممكن تحذفها لو تستخدم isCorrect من الخيارات بدل الفهرس
   points: number;
 }
 
 export interface Exam {
   id: string;
   title: string;
-  description: string;
-  duration: number; // in minutes
+  description?: string; // ممكن تخليه optional لو مش موجود في API
+  duration: number; // دقائق
   teacherId: string;
   questions: Question[];
-}
-
-export interface ExamResult {
-  examId: string;
-  studentId: string;
-  answers: number[];
-  score: number;
-  totalScore: number;
-  percentage: number;
-  submittedAt: Date;
 }
