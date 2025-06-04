@@ -6,12 +6,14 @@ import { Router } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   constructor(private router: Router) {}
 
-  ngOnInit(): void {
+  handleGetStartedClick(event: Event) {
+    event.preventDefault(); // prevent default link behavior
     const token = localStorage.getItem('token');
     if (token) {
+      console.log(token);
       this.router.navigate(['/teachers']);
     } else {
       this.router.navigate(['/login']);
