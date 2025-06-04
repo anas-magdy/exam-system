@@ -1,37 +1,60 @@
-
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { map, Observable, tap, catchError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://exam-management-sys-beta.vercel.app/api/v1/auth';
+  private apiUrl = 'https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/auth';
   private tokenKey = 'auth_token';
 
   constructor(private http: HttpClient) { }
-// في Authntecation.service.ts
-login(credentials: { email: string; password: string }): Observable<{token: string}> {
+
+  login(credentials: { email: string; password: string }): Observable<{token: string}> {
   return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
     tap(response => {
-      console.log('Full API response:', response); // أضف هذا السطر
-      if (!response.token && !response.access_token && !response.data) {
+      console.log('Full API response:', response);
+
+      // جرب استخراج التوكن من كل الأماكن المحتملة
+      const token =
+        response?.token ||
+        response?.access_token ||
+        response?.data?.token ||
+        response?.data;
+
+      if (!token || typeof token !== 'string') {
         throw new Error('No token found in response');
       }
 
-      const token = response.token || response.access_token || response.data;
       this.setToken(token);
     }),
     map(response => ({
-      token: response.token || response.access_token || response.data
-    }))
+      token:
+        response?.token ||
+        response?.access_token ||
+        response?.data?.token ||
+        response?.data
+    })),
+    catchError(error => {
+      console.error('Login error:', error);
+      throw error;
+    })
   );
 }
 
+
   register(userData: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+    console.log('Registering user with data:');
+    userData.forEach((value, key) => console.log(key, value));
+    return this.http.post(`${this.apiUrl}/register`, userData).pipe(
+      tap(response => console.log('Registration response:', response)),
+      catchError(error => {
+        console.error('Registration failed:', error);
+        throw error;
+      })
+    );
   }
 
   setToken(token: string): void {
