@@ -1,4 +1,5 @@
 <nav class="container px-5 py-3 mx-auto flex justify-between items-center">
+
   <div class="logo">
     <a routerLink="/" class="flex items-center gap-3">
       <img
@@ -11,9 +12,11 @@
         Exam <span class="text-green-600">System</span>
       </h2>
     </a>
+
   </div>
 
   <div class="actions">
+
     <ng-container *ngIf="isLoggedIn; else showLogin">
       <!-- ✅ Avatar when logged in -->
       <div class="flex items-center gap-4">
@@ -43,5 +46,6 @@
         >Login</a
       >
     </ng-template>
+
   </div>
 </nav>

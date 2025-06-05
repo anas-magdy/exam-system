@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
@@ -5,10 +6,14 @@ import { Router, RouterModule } from '@angular/router'; // ✅ لازم Router
 
 @Component({
   selector: 'app-navbar',
+  standalone: true,
+  imports: [RouterModule],
   templateUrl: './Navbar.component.html',
   imports: [CommonModule, RouterModule],
   styleUrls: ['./Navbar.component.css'],
 })
+
+
 export class NavbarComponent implements OnInit {
   isLoggedIn: boolean = false;
   role: string | null = null;
@@ -34,4 +39,5 @@ export class NavbarComponent implements OnInit {
     this.isLoggedIn = false;
     this.router.navigate(['/']); // توجيه للصفحة الرئيسية
   }
+
 }
