@@ -5,24 +5,30 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-QuizQuistions',
   templateUrl: './QuizQuistions.component.html',
   styleUrls: ['./QuizQuistions.component.css'],
-  imports: [QuestionComponent, FormsModule,]
-
+  imports: [QuestionComponent, FormsModule, CommonModule]
 })
 export class QuizQuistionsComponent implements OnInit {
   @Input() questions !: IQuestion[]
   @Input() quizName!: string
   @Input() duration!: string
   @Input() grade!: Number
+  activeIndex: number = 0;
+  quizId!: any
   constructor(
     private _EditQuizService: EditQuizService,
     private route: ActivatedRoute,
     private router: Router) { }
-  quizId!: any
+
+
+
+  toggleAccordion(index: number) {
+    this.activeIndex = this.activeIndex === index ? -1 : index;
+  }
   ngOnInit() {
     this.quizId = this.route.snapshot.paramMap.get('id')
 
@@ -56,6 +62,7 @@ export class QuizQuistionsComponent implements OnInit {
         ],
       },
     ];
+    this.activeIndex = this.questions.length - 1;
     console.log(this.questions);
   }
   handelOnSave() {

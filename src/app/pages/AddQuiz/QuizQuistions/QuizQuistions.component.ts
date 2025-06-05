@@ -4,12 +4,12 @@ import { IQuestion, QuizService } from '../Quize.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-QuizQuistions',
   templateUrl: './QuizQuistions.component.html',
   styleUrls: ['./QuizQuistions.component.css'],
-  imports: [QuestionComponent, FormsModule]
+  imports: [QuestionComponent, FormsModule, CommonModule]
 
 })
 export class QuizQuistionsComponent implements OnInit {
@@ -17,8 +17,12 @@ export class QuizQuistionsComponent implements OnInit {
   @Input() quizName: string = ""
   duration: string = ""
   grade!: Number
+  activeIndex: number = 0;
   constructor(private _quizService: QuizService, private router: Router) { }
 
+  toggleAccordion(index: number) {
+    this.activeIndex = this.activeIndex === index ? -1 : index;
+  }
   ngOnInit() {
     console.log("object from anas", this._quizService.quiz)
   }
@@ -51,6 +55,7 @@ export class QuizQuistionsComponent implements OnInit {
         ],
       },
     ];
+    this.activeIndex = this.questions.length - 1;
     console.log(this.questions);
   }
   handelOnSubmit() {
