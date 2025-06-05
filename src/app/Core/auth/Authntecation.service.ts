@@ -13,41 +13,47 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(credentials: { email: string; password: string }): Observable<{token: string}> {
-  return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
-    tap(response => {
-      console.log('Full API response:', response);
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+      tap(response => {
+        console.log('Full API response:', response);
 
-      // جرب استخراج التوكن من كل الأماكن المحتملة
-      const token =
-        response?.token ||
-        response?.access_token ||
-        response?.data?.token ||
-        response?.data;
+        const token =
+          response?.token ||
+          response?.access_token ||
+          response?.data?.token ||
+          response?.data;
 
-      if (!token || typeof token !== 'string') {
-        throw new Error('No token found in response');
-      }
+        if (!token || typeof token !== 'string') {
+          throw new Error('No token found in response');
+        }
 
-      this.setToken(token);
-    }),
-    map(response => ({
-      token:
-        response?.token ||
-        response?.access_token ||
-        response?.data?.token ||
-        response?.data
-    })),
-    catchError(error => {
-      console.error('Login error:', error);
-      throw error;
-    })
-  );
-}
-
+        this.setToken(token);
+      }),
+      map(response => ({
+        token:
+          response?.token ||
+          response?.access_token ||
+          response?.data?.token ||
+          response?.data
+      })),
+      catchError(error => {
+        console.error('Login error:', error);
+        throw error;
+      })
+    );
+  }
 
   register(userData: FormData): Observable<any> {
     console.log('Registering user with data:');
-    userData.forEach((value, key) => console.log(key, value));
+    // Log FormData contents for debugging
+    userData.forEach((value, key) => {
+      if (value instanceof File) {
+        console.log(key, value.name, value.size, value.type);
+      } else {
+        console.log(key, value);
+      }
+    });
+
     return this.http.post(`${this.apiUrl}/register`, userData).pipe(
       tap(response => console.log('Registration response:', response)),
       catchError(error => {
