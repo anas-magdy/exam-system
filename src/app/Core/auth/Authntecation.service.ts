@@ -8,7 +8,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class AuthService {
   private apiUrl = 'https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/auth';
-  private tokenKey = 'auth_token';
+  private tokenKey = 'token';
 
   constructor(private http: HttpClient) { }
 

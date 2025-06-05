@@ -1,0 +1,279 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Navigation -->
+  <div class="mb-6 flex justify-between items-center">
+    <h3 class="text-lg font-bold">Available Exams</h3>
+    <span class="mx-3 text-xl font-semibold text-green-600"
+      >({{ examCount }})</span
+    >
+    <a
+      href="/teachers"
+      class="block px-4 w-[160px] text-center py-2 ms-auto bg-green-600 cursor-pointer text-white rounded hover:bg-green-700 transition-colors"
+    >
+      Back to Teachers
+    </a>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="text-center py-12">
+    <div
+      class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent"
+    ></div>
+    <p class="mt-4 text-gray-600">Loading teacher data...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div
+    *ngIf="!isLoading && errorMessage"
+    class="text-center py-12 bg-white rounded-lg shadow-sm max-w-md mx-auto text-red-600 font-semibold"
+  >
+    {{ errorMessage }}
+  </div>
+
+  <!-- No Exams Message -->
+  <div
+    *ngIf="!isLoading && noExams && !errorMessage"
+    class="text-center py-12 bg-white rounded-lg shadow-sm max-w-md mx-auto"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-16 w-16 mx-auto mb-6 text-green-400 animate-pulse"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+    <h3 class="text-lg font-semibold text-gray-700">No exams available</h3>
+  </div>
+
+  <!-- Teacher Profile and Exams -->
+  <div
+    *ngIf="
+      !isLoading && !errorMessage && teacherData && teacherData.Exam.length > 0
+    "
+    class="bg-white"
+  >
+    <!-- Teacher Profile -->
+
+    <!-- Exams List -->
+
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div
+        *ngFor="let exam of teacherData.Exam"
+        class="group relative bg-white border-2 border-green-100 rounded-2xl p-6 hover:shadow-2xl hover:shadow-green-500/20 transition-all duration-500 transform hover:-translate-y-2 hover:border-green-300"
+      >
+        <!-- Decorative elements -->
+        <div
+          class="absolute -top-2 -right-2 w-12 h-12 bg-green-500 rounded-full opacity-10"
+        ></div>
+        <div
+          class="absolute -bottom-1 -left-1 w-8 h-8 bg-green-400 rounded-full opacity-5"
+        ></div>
+
+        <div class="relative z-10">
+          <!-- Header with icon -->
+          <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-14 h-14 bg-green-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300"
+              >
+                <svg
+                  class="w-7 h-7 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  ></path>
+                </svg>
+              </div>
+              <div
+                class="w-3 h-3 bg-green-400 rounded-full animate-pulse"
+              ></div>
+            </div>
+            <span
+              class="px-4 py-2 bg-green-100 text-green-700 text-xs font-bold rounded-full border-2 border-green-200 group-hover:bg-green-200 transition-colors"
+            >
+              Available
+            </span>
+          </div>
+
+          <!-- Title -->
+          <h4
+            class="font-bold text-xl text-gray-800 mb-5 group-hover:text-green-700 transition-colors duration-300"
+          >
+            {{ exam.name }}
+          </h4>
+
+          <!-- Stats section -->
+          <div class="space-y-4 mb-6">
+            <!-- Questions -->
+            <div
+              class="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-100 group-hover:bg-green-100 transition-colors"
+            >
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center"
+                >
+                  <svg
+                    class="w-5 h-5 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <span class="text-sm font-medium text-gray-600">Questions</span>
+              </div>
+              <span class="text-2xl font-bold text-green-600">{{
+                exam.questionsCount
+              }}</span>
+            </div>
+
+            <!-- Duration -->
+            <div
+              class="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-100 group-hover:bg-green-100 transition-colors"
+            >
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center"
+                >
+                  <svg
+                    class="w-5 h-5 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <span class="text-sm font-medium text-gray-600">Duration</span>
+              </div>
+              <span class="text-2xl font-bold text-green-600"
+                >{{ exam.duration }}m</span
+              >
+            </div>
+
+            <!-- Grade -->
+            <div
+              class="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-100 group-hover:bg-green-100 transition-colors"
+            >
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center"
+                >
+                  <svg
+                    class="w-5 h-5 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                    ></path>
+                  </svg>
+                </div>
+                <span class="text-sm font-medium text-gray-600">Grade</span>
+              </div>
+              <span class="text-2xl font-bold text-green-600">{{
+                exam.grade
+              }}</span>
+            </div>
+          </div>
+          <!-- Action button -->
+          <button
+            (click)="startExam(exam.id)"
+            [disabled]="loadingExamId === exam.id"
+            class="w-full group/btn relative overflow-hidden bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-green-500/30 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            <span
+              class="relative z-10 flex items-center justify-center space-x-3"
+            >
+              <ng-container *ngIf="loadingExamId === exam.id; else notLoading">
+                <!-- Loader SVG صغير -->
+                <svg
+                  class="animate-spin h-6 w-6 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                <span>Starting...</span>
+              </ng-container>
+              <ng-template #notLoading>
+                <svg
+                  class="w-6 h-6 group-hover/btn:rotate-12 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.01M15 10h1.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <span class="text-lg">Start Exam</span>
+                <svg
+                  class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  ></path>
+                </svg>
+              </ng-template>
+            </span>
+
+            <!-- Button shine effect -->
+            <div
+              class="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full bg-white/20 transition-transform duration-700"
+            ></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

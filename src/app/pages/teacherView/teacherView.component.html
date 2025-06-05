@@ -1,94 +1,58 @@
 <div class="containers">
-  <h2 class="text-2xl font-bold mb-6 px-4">My Quizzes</h2>
-  <div class="container mx-auto px-4 ">
+  <h2 class="text-4xl font-bold mb-6 px-4 text-center"><span class="text-green-600">My</span> Quizzes</h2>
+
+  @if (loading) {
+  <div class="container mx-auto mt-28">
+    <div class="flex justify-center py-10">
+      <!-- Flowbite spinner -->
+      <div role="status">
+        <svg aria-hidden="true" class="w-20 h-20 text-gray-200 animate-spin fill-green-500" viewBox="0 0 100 101"
+          fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 50.59c0 27.61-22.39 50-50 50S0 78.2 0 50.59c0-27.61 22.39-50 50-50s50 22.39 50 50z"
+            fill="currentColor" />
+          <path
+            d="M93.97 39.04c2.18-.54 3.5-2.78 2.71-4.94C93.12 17.27 76.72 4.1 57.1 4.1c-19.63 0-36.03 13.17-39.59 29.99-.47 2.2.94 4.42 3.12 4.95 2.17.54 4.41-.94 4.94-3.12C28.1 22.45 41.48 12.1 57.1 12.1c15.61 0 29 10.35 32.26 24.82.54 2.18 2.78 3.5 4.94 2.71z"
+            fill="currentFill" />
+        </svg>
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </div>
+  }
+  @if(!loading){
+  <div class="container mx-auto px-4 pb-8">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+
+      @for (item of exams; track $index) {
       <div class="w-full bg-white border border-gray-200 rounded-lg shadow-sm px-6 relative">
+        <button (click)="confirmDelete(item.id)" class="text-red-600 hover:text-red-800 absolute right-2 top-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
         <div class="flex flex-col items-center py-6">
           <div
             class="bg-green-500 w-[100%] flex justify-center items-center rounded-lg text-white p-6 h-[150px] relative">
-            <i class="fa-solid fa-eye absolute top-2 right-3 cursor-pointer"></i>
             <i class="fas fa-terminal fa-2x"></i>
           </div>
 
-          <h5 class="mb-1 text-xl font-medium text-gray-900 text-center">Anguler</h5>
-          <span class="text-sm text-gray-500 text-center"> SSR </span>
+          <h5 class="mb-1 text-xl font-medium text-gray-900 text-center">{{item.name}}</h5>
+          <span class="text-sm text-gray-500 text-center"> {{item.duration}} M </span>
+          <span class="text-sm text-gray-500 text-center">{{item.grade}}</span>
           <div class="flex mt-4 md:mt-6 flex-wrap justify-center gap-2">
-            <a href="#"
+            <a [routerLink]="['/editQuiz', item.id]"
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300">
               Edit</a>
-            <a [routerLink]="'/view-quiz/1'"
+            <a [routerLink]="['/view-quiz', item.id, item.questions.length]"
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
               Statistics
             </a>
           </div>
         </div>
       </div>
+      }
 
-      <div class="w-full bg-white border border-gray-200 rounded-lg shadow-sm px-6 relative">
-        <div class="flex flex-col items-center py-6">
-          <div class="bg-green-500 w-[100%] flex justify-center items-center rounded-lg text-white p-6 h-[150px] relative">
-            <i class="fa-solid fa-eye absolute top-2 right-3 cursor-pointer"></i>
-            <i class="fas fa-terminal fa-2x"></i>
-          </div>
-      
-          <h5 class="mb-1 text-xl font-medium text-gray-900 text-center">Anguler</h5>
-          <span class="text-sm text-gray-500 text-center"> SSR </span>
-          <div class="flex mt-4 md:mt-6 flex-wrap justify-center gap-2">
-            <a href="#"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300">
-              Edit</a>
-            <a [routerLink]="'/view-quiz/1'"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
-              Statistics
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="w-full bg-white border border-gray-200 rounded-lg shadow-sm px-6 relative">
-        <div class="flex flex-col items-center py-6">
-          <div class="bg-green-500 w-[100%] flex justify-center items-center rounded-lg text-white p-6 h-[150px] relative">
-            <i class="fa-solid fa-eye absolute top-2 right-3 cursor-pointer"></i>
-            <i class="fas fa-terminal fa-2x"></i>
-          </div>
-      
-          <h5 class="mb-1 text-xl font-medium text-gray-900 text-center">Anguler</h5>
-          <span class="text-sm text-gray-500 text-center"> SSR </span>
-          <div class="flex mt-4 md:mt-6 flex-wrap justify-center gap-2">
-            <a href="#"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300">
-              Edit</a>
-            <a [routerLink]="'/view-quiz/1'"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
-              Statistics
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="w-full bg-white border border-gray-200 rounded-lg shadow-sm px-6 relative">
-        <div class="flex flex-col items-center py-6">
-          <div class="bg-green-500 w-[100%] flex justify-center items-center rounded-lg text-white p-6 h-[150px] relative">
-            <i class="fa-solid fa-eye absolute top-2 right-3 cursor-pointer"></i>
-            <i class="fas fa-terminal fa-2x"></i>
-          </div>
-      
-          <h5 class="mb-1 text-xl font-medium text-gray-900 text-center">Anguler</h5>
-          <span class="text-sm text-gray-500 text-center"> SSR </span>
-          <div class="flex mt-4 md:mt-6 flex-wrap justify-center gap-2">
-            <a href="#"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300">
-              Edit</a>
-            <a [routerLink]="'/view-quiz/1'"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
-              Statistics
-            </a>
-          </div>
-        </div>
-      </div>
 
       <div [routerLink]="'/add-quiz'"
-        class="w-full bg-white border-2 border-dashed border-gray-300 rounded-lg shadow-sm px-6 relative hover:border-green-500 transition-colors cursor-pointer">
+        class="w-full min-h-[300px] bg-white border-2 border-dashed border-gray-300 rounded-lg shadow-sm px-6 relative hover:border-green-500 transition-colors cursor-pointer">
         <div class="flex flex-col items-center justify-center py-6 h-full">
           <div class="bg-gray-100 w-16 h-16 rounded-full flex justify-center items-center text-gray-400 mb-4">
             <i class="fas fa-plus text-3xl"></i>
@@ -100,4 +64,7 @@
 
     </div>
   </div>
+  }
+
+
 </div>

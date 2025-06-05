@@ -2,7 +2,6 @@
   <button (click)="handleDelete()" class="text-red-600 font-bold text-2xl hover:scale-110 flex self-end mr-2 mt-2">
     <i class="fa-solid fa-xmark"></i>
   </button>
-  
   <div class="flex  p-5 my-2 justify-center items-center ">
     <div class="w-1/6 text-xl text-center flex">
       <span
@@ -15,7 +14,6 @@
     </div>
     <input type="text" class="rounded-md w-5/6 mx-3" [(ngModel)]="question.theQuestion">
   </div>
-
   <div class="flex p-5 mb-2 justify-center items-center">
     <div class="w-1/6 text-xl text-center">Choices : </div>
     <div class="w-5/6 border-2 rounded-md p-3 flex flex-col justify-center items-center">
@@ -23,12 +21,6 @@
       <div class="flex mb-2 w-[100%]">
         <label for="choiceA " class="mr-2 text-xl text-nowrap">{{item.key}} :</label>
         <input type="text" class="rounded-md w-[100%]" [(ngModel)]="item.option">
-        @if (item.key != "A" && item.key != "B") {
-          <button type="button" class="text-red-600 hover:scale-110" (click)="deleteChoice(item.key)">
-           <i class="fa-solid fa-xmark"></i>
-          </button>
-        }
-   
       </div>
       }
       @if (validChoice) {
@@ -41,7 +33,6 @@
     </div>
 
   </div>
-
   <div class="flex rounded-md p-5 mb-2 justify-center items-center">
     <label class="w-1/6 text-center">Correct Answer</label>
     <select class="rounded-md w-5/6" [ngModel]="getCorrectAnswerKey()" (ngModelChange)="onCorrectAnswerChange($event)">
@@ -51,6 +42,9 @@
         {{item.key}} : {{ item.option }}
       </option>
       }
+
     </select>
   </div>
+
+
 </div>

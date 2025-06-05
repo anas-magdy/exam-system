@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input, Input, OnInit } from '@angular/core';
 import { QuestionComponent } from './Question/Question.component';
-import { IQuestion, QuizService } from '../Quize.service';
+import { IQuestion, EditQuizService } from '../EditQuiz.service';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
@@ -10,21 +11,27 @@ import { CommonModule } from '@angular/common';
   templateUrl: './QuizQuistions.component.html',
   styleUrls: ['./QuizQuistions.component.css'],
   imports: [QuestionComponent, FormsModule, CommonModule]
-
 })
 export class QuizQuistionsComponent implements OnInit {
   @Input() questions !: IQuestion[]
-  @Input() quizName: string = ""
-  duration: string = ""
-  grade!: Number
+  @Input() quizName!: string
+  @Input() duration!: string
+  @Input() grade!: Number
   activeIndex: number = 0;
-  constructor(private _quizService: QuizService, private router: Router) { }
+  quizId!: any
+  constructor(
+    private _EditQuizService: EditQuizService,
+    private route: ActivatedRoute,
+    private router: Router) { }
+
+
 
   toggleAccordion(index: number) {
     this.activeIndex = this.activeIndex === index ? -1 : index;
   }
   ngOnInit() {
-    console.log("object from anas", this._quizService.quiz)
+    this.quizId = this.route.snapshot.paramMap.get('id')
+
   }
   handleDeleteQuestion(index: number) {
     this.questions.splice(index, 1);
@@ -37,10 +44,10 @@ export class QuizQuistionsComponent implements OnInit {
         lastQuestion.options.every(opt => opt.option.trim() !== '') &&
         lastQuestion.options.some(opt => opt.isCorrect);
       if (!isQuestionValid) {
-         Swal.fire({
+        Swal.fire({
           icon: 'warning',
-           title: 'warning',
-           text: 'Check the previous question!',
+          title: 'warning',
+          text: 'Check the previous question!',
         });
         return;
       }
@@ -58,8 +65,7 @@ export class QuizQuistionsComponent implements OnInit {
     this.activeIndex = this.questions.length - 1;
     console.log(this.questions);
   }
-  handelOnSubmit() {
-
+  handelOnSave() {
 
     if (
       this.quizName.trim() === '' ||
@@ -71,7 +77,7 @@ export class QuizQuistionsComponent implements OnInit {
       Swal.fire({
         icon: 'warning',
         title: 'Incomplete data',
-        text:'Please fill in the quiz name, duration, and grade before submitting.',
+        text: 'Please fill in the quiz name, duration, and grade before submitting.',
       });
       return;
     }
@@ -88,30 +94,25 @@ export class QuizQuistionsComponent implements OnInit {
       });
       return;
     }
-    this._quizService.quiz.name = this.quizName;
-    this._quizService.quiz.questions = this.questions;
-    this._quizService.quiz.duration = this.duration;
-    this._quizService.quiz.grade = Number(this.grade)
-    this._quizService.submitQuiz(this._quizService.quiz).subscribe({
+
+
+
+
+    this._EditQuizService.quiz = {
+      name: this.quizName,
+      questions: this.questions,
+      duration: this.duration,
+      grade: Number(this.grade),
+    };
+
+    this._EditQuizService.editQuiz(this._EditQuizService.quiz, this.quizId).subscribe({
       next: (res) => {
         console.log('Quiz submitted successfully:', res);
-        // Swal.fire({
-        //   icon: 'success',
-        //   title: 'تم الإرسال',
-        //   text: 'تم إرسال الاختبار بنجاح!',
-        //   timer: 1000,
-        //   showConfirmButton: false
-        // });
         this.router.navigate(['/teacherViewExams']);
       },
       error: (err) => {
         console.error('Submission error:', err);
-      //         Swal.fire({
-      //   icon: 'error',
-      //   title: 'فشل الإرسال',
-      //   text: 'حدث خطأ أثناء إرسال الاختبار. حاول مرة أخرى.',
-      // });
-
+        alert('Failed to submit quiz.');
       }
     });
   }
