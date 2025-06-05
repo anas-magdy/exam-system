@@ -1,5 +1,5 @@
 <div class="containers">
-  <h2 class="text-2xl font-bold mb-6 px-4">My Quizzes</h2>
+  <h2 class="text-4xl font-bold mb-6 px-4 text-center"><span class="text-green-600">My</span> Quizzes</h2>
 
   @if (loading) {
   <div class="container mx-auto mt-28">
@@ -20,7 +20,7 @@
   </div>
   }
   @if(!loading){
-  <div class="container mx-auto px-4 ">
+  <div class="container mx-auto px-4 pb-8">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
       @for (item of exams; track $index) {

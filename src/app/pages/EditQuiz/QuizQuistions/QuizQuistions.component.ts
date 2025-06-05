@@ -4,6 +4,8 @@ import { IQuestion, EditQuizService } from '../EditQuiz.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-QuizQuistions',
   templateUrl: './QuizQuistions.component.html',
@@ -29,6 +31,21 @@ export class QuizQuistionsComponent implements OnInit {
     this.questions.splice(index, 1);
   }
   handelAddQuestion() {
+    const lastQuestion = this.questions[this.questions.length - 1];
+    if (lastQuestion) {
+      const isQuestionValid =
+        lastQuestion.theQuestion.trim() !== '' &&
+        lastQuestion.options.every(opt => opt.option.trim() !== '') &&
+        lastQuestion.options.some(opt => opt.isCorrect);
+      if (!isQuestionValid) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'warning',
+          text: 'Check the previous question!',
+        });
+        return;
+      }
+    }
     this.questions = [
       ...this.questions,
       {
@@ -42,6 +59,38 @@ export class QuizQuistionsComponent implements OnInit {
     console.log(this.questions);
   }
   handelOnSave() {
+
+    if (
+      this.quizName.trim() === '' ||
+      this.duration.trim() === '' ||
+      this.grade === undefined ||
+      this.grade === null ||
+      isNaN(Number(this.grade))
+    ) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Incomplete data',
+        text: 'Please fill in the quiz name, duration, and grade before submitting.',
+      });
+      return;
+    }
+    const allQuestionsValid = this.questions.every((q, index) =>
+      q.theQuestion.trim() !== '' &&
+      q.options.every(opt => opt.option.trim() !== '') &&
+      q.options.some(opt => opt.isCorrect)
+    );
+    if (!allQuestionsValid) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Check questions',
+        text: 'Some questions are incomplete. Make sure you write the question and options and select the correct answer..',
+      });
+      return;
+    }
+
+
+
+
     this._EditQuizService.quiz = {
       name: this.quizName,
       questions: this.questions,
