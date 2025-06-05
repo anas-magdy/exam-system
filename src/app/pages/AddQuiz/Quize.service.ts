@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 export interface IQuiz {
   name: string;
   duration: string;
@@ -22,8 +23,8 @@ export interface IChoice {
 export class QuizService {
   quiz: IQuiz = {
     name: "",
-    grade:100,
-    duration:"",
+    grade: 100,
+    duration: "",
     questions: [
       {
         theQuestion: "",
@@ -36,14 +37,20 @@ export class QuizService {
 
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
+
+  private getToken(): string {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('token') || '';
+    }
+    return '';
+  }
   submitQuiz(q: IQuiz): Observable<any> {
-    const token: string = localStorage.getItem('token') || "";
-    console.log(token);
-
     const headers = new HttpHeaders({
-      'token': token,
+      'token': this.getToken(),
       'Content-Type': 'application/json'
     });
 
