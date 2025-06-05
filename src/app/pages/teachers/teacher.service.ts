@@ -29,7 +29,8 @@ export interface Teacher {
     createdAt: string;
     updatedAt: string;
   };
-  exams?: Exam[]; // إضافة خاصية اختيارية للامتحانات
+  Exam?: Exam[]; // إضافة خاصية اختيارية للامتحانات
+  examCount?: number;
 }
 
 export interface Exam {
@@ -75,7 +76,6 @@ export class TeacherService {
   private cachedTeachers: Teacher[] = [];
 
   constructor(private http: HttpClient) {}
-
   getAllTeachers(): Observable<Teacher[]> {
     if (this.cachedTeachers.length > 0) {
       return of(this.cachedTeachers);
@@ -85,8 +85,13 @@ export class TeacherService {
       .get<{ message: string; data: Teacher[] }>(this.apiUrl)
       .pipe(
         map((response) => {
-          this.cachedTeachers = response.data;
-          return response.data;
+          const teachersWithExamCount = response.data.map((teacher) => ({
+            ...teacher,
+            examCount: teacher.Exam?.length || 0,
+          }));
+
+          this.cachedTeachers = teachersWithExamCount;
+          return teachersWithExamCount;
         })
       );
   }

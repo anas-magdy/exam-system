@@ -48,8 +48,11 @@
     <div class="flex justify-center space-x-4 mb-5">
       <div>
         <p class="text-xs text-gray-500">Exams</p>
-        <p class="font-semibold text-gray-700">24</p>
+        <p class="font-semibold text-gray-700">
+          {{ teacher.Exam?.length || 0 }}
+        </p>
       </div>
+
       <div>
         <p class="text-xs text-gray-500">Rating</p>
         <p class="font-semibold text-gray-700">4.9</p>

@@ -1,4 +1,5 @@
 
+
 import { Component, Inject, Injectable, OnInit, PLATFORM_ID } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
@@ -8,13 +9,10 @@ import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule],
   templateUrl: './Navbar.component.html',
   imports: [CommonModule, RouterModule],
   styleUrls: ['./Navbar.component.css'],
 })
-
-
 export class NavbarComponent implements OnInit {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
   isLoggedIn: boolean = false;
@@ -46,5 +44,4 @@ export class NavbarComponent implements OnInit {
     this.isLoggedIn = false;
     this.router.navigate(['/']); // توجيه للصفحة الرئيسية
   }
-
 }
