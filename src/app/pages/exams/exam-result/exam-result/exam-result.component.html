@@ -5,18 +5,18 @@
     </h2>
     <div class="inline-block px-6 py-3 bg-green-100 rounded-full">
       <p class="text-xl font-semibold text-green-800">
-        Score: <span class="font-bold">{{ score }}</span> /
-        <span>{{ total }}</span>
-        (<span class="font-bold">{{ percentage }}%</span>)
+        Score: <span class="font-bold">{{ score }}</span>
       </p>
     </div>
   </div>
 
   <div class="space-y-6">
     <div
-      *ngFor="let q of exam.questions; index as i"
+      *ngFor="let q of exam.questions; index as i; trackBy: trackByQuestionId"
       class="p-5 border rounded-lg transition-all hover:shadow-md"
-      [class.bg-green-50]="userAnswers[i] === q.correctAnswer"
+      [class.bg-green-50]="
+        userAnswers[i] !== undefined && userAnswers[i] === q.correctAnswer
+      "
     >
       <h4 class="text-xl font-semibold mb-3 text-gray-800">
         Q{{ i + 1 }}: {{ q.text }}
@@ -42,6 +42,7 @@
         </li>
       </ul>
     </div>
+
     <div class="text-center mt-10">
       <button
         (click)="goToTeachers()"
