@@ -18,7 +18,7 @@ declare var window: any;
 })
 export class TeachersComponent implements AfterViewInit, OnInit {
   constructor(private router: Router, private teacherService: TeacherService) {}
-
+  loadingTeacherId: string | null = null;
   ngAfterViewInit(): void {
     if (window?.Flowbite?.initDropdowns) {
       window.Flowbite.initDropdowns();
@@ -131,13 +131,17 @@ export class TeachersComponent implements AfterViewInit, OnInit {
   }
 
   viewTeacherExams(teacherId: string) {
+    this.loadingTeacherId = teacherId;
+
     this.teacherService.getTeacherExams(teacherId).subscribe({
       next: (exams) => {
+        this.loadingTeacherId = null;
         this.router.navigate(['/teachers', teacherId, 'exams'], {
           state: { exams },
         });
       },
       error: (err) => {
+        this.loadingTeacherId = null;
         console.error('❌ Error fetching exams:', err);
         this.router.navigate(['/teachers', teacherId, 'exams'], {
           state: { error: err.message || 'Error loading exams' },

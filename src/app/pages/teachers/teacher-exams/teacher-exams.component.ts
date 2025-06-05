@@ -16,7 +16,7 @@ export class TeacherExamsComponent {
 
   errorMessage = '';
   noExams = false;
-
+  loadingExamId: string | null = null;
   constructor(
     private route: ActivatedRoute,
     private teacherService: TeacherService,
@@ -45,12 +45,20 @@ export class TeacherExamsComponent {
   }
 
   startExam(examId: string) {
-    this.examService.startExam(examId).subscribe((examLoaded) => {
-      if (examLoaded) {
-        this.router.navigate(['/exam', examId]); // ✅ التنقل بعد تحميل الامتحان
-      } else {
-        alert('Failed to start the exam.');
-      }
+    this.loadingExamId = examId; // تشغيل اللودر للامتحان اللي بدأ التحميل
+    this.examService.startExam(examId).subscribe({
+      next: (examLoaded) => {
+        this.loadingExamId = null; // إيقاف اللودر
+        if (examLoaded) {
+          this.router.navigate(['/exam', examId]);
+        } else {
+          alert('Failed to start the exam.');
+        }
+      },
+      error: () => {
+        this.loadingExamId = null; // إيقاف اللودر حتى لو حصل خطأ
+        alert('Failed to start the exam due to network error.');
+      },
     });
   }
 }

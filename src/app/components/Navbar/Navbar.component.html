@@ -16,14 +16,23 @@
   <div class="actions">
     <ng-container *ngIf="isLoggedIn; else showLogin">
       <!-- ✅ Avatar when logged in -->
-      <img
-        src="https://i.pravatar.cc/40?u=avatar"
-        class="rounded-full cursor-pointer border border-gray-300"
-        width="40"
-        height="40"
-        alt="User Avatar"
-        title="Logged in as {{ role }}"
-      />
+      <div class="flex items-center gap-4">
+        <img
+          src="https://i.pravatar.cc/40?u=avatar"
+          class="rounded-full border border-gray-300"
+          width="40"
+          height="40"
+          alt="User Avatar"
+          title="Logged in as {{ role }}"
+        />
+
+        <button
+          (click)="logout()"
+          class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-all"
+        >
+          Logout
+        </button>
+      </div>
     </ng-container>
 
     <ng-template #showLogin>

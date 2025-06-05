@@ -46,7 +46,7 @@ export class ExamService {
           id: data.id,
           title: data.name,
           description: '',
-          duration: Number(data.duration), // ← مهم جداً لو كانت سترينج
+          duration: Number(data.duration),
           teacherId: data.teacherId,
           questions: data.questions.map((q: any) => {
             const correctIndex = q.options.findIndex(
@@ -86,7 +86,14 @@ export class ExamService {
             if (current > 0) {
               this.examTimer$.next(current - 1);
             } else {
-              this.submitExam(this.answers);
+              this.submitExam(this.answers).subscribe({
+                next: (result) => {
+                  console.log('Exam auto-submitted on timeout:', result);
+                },
+                error: (err) => {
+                  console.error('Auto-submit failed:', err);
+                },
+              });
               this.timerSubscription?.unsubscribe();
             }
           });
@@ -118,6 +125,7 @@ export class ExamService {
       examId: exam.id,
       answers: this.answers
         .map((answerIdx, i) => {
+          if (answerIdx === -1) return null;
           const question = exam.questions[i];
           const option = question.options[answerIdx];
           if (!option) return null;
@@ -129,7 +137,7 @@ export class ExamService {
         .filter(Boolean),
     };
 
-    return this.http.post(
+    return this.http.post<any>(
       'https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/student',
       body,
       { headers }
@@ -142,29 +150,29 @@ export class ExamService {
 
     this.answers = answers;
 
-    let score = 0;
-    answers.forEach((answerIdx, questionIdx) => {
-      if (answerIdx === exam.questions[questionIdx].correctAnswer) {
-        score += exam.questions[questionIdx].points;
-      }
-    });
+    return this.submitExamToApi().pipe(
+      map((response) => {
+        const scoreFromApi = response.data.score;
+        const studentId = response.data.studentId;
+        const totalQuestions = response.totalQuestions;
 
-    const totalScore = exam.questions.reduce((sum, q) => sum + q.points, 0);
-    const percentage = Math.round((score / totalScore) * 100);
+        const totalScore = totalQuestions * 10; // 🔥 نحسبها من السيرفر
+        const percentage = Math.round((scoreFromApi / totalScore) * 100);
 
-    const result: ExamResult = {
-      examId: exam.id,
-      studentId: 'current-student-id', // Replace later
-      answers,
-      score,
-      totalScore,
-      percentage,
-      submittedAt: new Date(),
-    };
+        const result: ExamResult = {
+          examId: exam.id,
+          studentId: studentId,
+          answers,
+          score: scoreFromApi,
+          totalScore,
+          percentage,
+          submittedAt: new Date(),
+        };
 
-    this.saveResult(result);
-
-    return this.submitExamToApi().pipe(map(() => result));
+        this.saveResult(result);
+        return result;
+      })
+    );
   }
 
   endExam() {
