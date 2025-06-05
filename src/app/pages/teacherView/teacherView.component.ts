@@ -43,6 +43,7 @@ export class TeacherViewComponent implements OnInit {
       }
     });
   }
+  
   deleteExam(id: string) {
     this._TeacherGetExamsService.deleteExam(id).subscribe({
       next: () => {
