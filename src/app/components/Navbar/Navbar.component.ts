@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // ✅ ضروري علشان routerLink يشتغل
+import { Router, RouterModule } from '@angular/router'; // ✅ لازم Router
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './Navbar.component.html',
@@ -11,6 +12,8 @@ import { RouterModule } from '@angular/router'; // ✅ ضروري علشان rou
 export class NavbarComponent implements OnInit {
   isLoggedIn: boolean = false;
   role: string | null = null;
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
     const token = localStorage.getItem('token');
@@ -24,5 +27,11 @@ export class NavbarComponent implements OnInit {
         this.isLoggedIn = false;
       }
     }
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.isLoggedIn = false;
+    this.router.navigate(['/']); // توجيه للصفحة الرئيسية
   }
 }

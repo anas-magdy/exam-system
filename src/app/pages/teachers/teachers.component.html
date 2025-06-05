@@ -88,6 +88,7 @@
         *ngFor="let teacher of teachers"
         [teacher]="teacher"
         [examCount]="getExamCount(teacher.id)"
+        [loading]="loadingTeacherId === teacher.id"
         (viewExams)="viewTeacherExams($event)"
       ></app-teacher>
     </div>

@@ -21,12 +21,14 @@ export class ExamQuestionsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(private examService: ExamService, private router: Router) {}
+  loading: boolean = false;
 
   ngOnInit() {
     this.subscriptions.push(
       this.examService.getCurrentExam().subscribe((exam) => {
         this.exam = exam;
         if (!exam) {
+          console.log(exam);
           this.router.navigate(['/teachers']);
           return;
         }
@@ -60,7 +62,7 @@ export class ExamQuestionsComponent implements OnInit, OnDestroy {
         text: "You won't be able to go back!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#16a34a', // Tailwind green-600
+        confirmButtonColor: '#16a34a',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, submit it!',
       }).then((result) => {
@@ -72,13 +74,17 @@ export class ExamQuestionsComponent implements OnInit, OnDestroy {
   }
 
   private finalSubmit() {
-    this.examService.submitExamToApi().subscribe({
+    this.loading = true; // ➡️ تشغيل اللودر
+
+    this.examService.submitExam(this.answers).subscribe({
       next: () => {
+        this.loading = false; // ➡️ إيقاف اللودر عند النجاح
         if (this.exam) {
           this.router.navigate(['/exam-result', this.exam.id]);
         }
       },
       error: (err) => {
+        this.loading = false; // ➡️ إيقاف اللودر عند الخطأ
         const errorMessage = err.error?.message || 'Something went wrong';
         Swal.fire({
           icon: 'error',
