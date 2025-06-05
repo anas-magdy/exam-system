@@ -1,8 +1,9 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, Injectable, OnInit, PLATFORM_ID } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router'; // ✅ لازم Router
+import { RouterModule } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -15,13 +16,19 @@ import { Router, RouterModule } from '@angular/router'; // ✅ لازم Router
 
 
 export class NavbarComponent implements OnInit {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
   isLoggedIn: boolean = false;
   role: string | null = null;
 
-  constructor(private router: Router) {}
 
+  private getToken(): string {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('token') || '';
+    }
+    return '';
+  }
   ngOnInit() {
-    const token = localStorage.getItem('token');
+    const token = this.getToken();
     if (token) {
       try {
         const decoded = jwtDecode<{ role: string }>(token);
