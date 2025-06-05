@@ -20,6 +20,7 @@ export interface Question {
   options: Option[]; // بدل string[] هنا كائنات Option
   correctAnswer: number; // ممكن تحذفها لو تستخدم isCorrect من الخيارات بدل الفهرس
   points: number;
+  explanation?: string;
 }
 
 export interface Exam {

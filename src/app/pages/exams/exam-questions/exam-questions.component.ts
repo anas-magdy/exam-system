@@ -5,6 +5,7 @@ import { ExamService } from './../exam.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Exam } from '../exam.model';
+import Swal from 'sweetalert2'; // ⬅️ استيراد SweetAlert
 
 @Component({
   selector: 'app-exam-questions',
@@ -50,15 +51,45 @@ export class ExamQuestionsComponent implements OnInit, OnDestroy {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   }
 
-  // دالة التسليم (يدوي أو تلقائي)
   submitExam(autoSubmit: boolean = false) {
-    if (autoSubmit || confirm('Are you sure you want to submit your exam?')) {
-      const result = this.examService.submitExam(this.answers); // ✅ send answers to the service
-      console.log(result);
-      if (this.exam) {
-        this.router.navigate(['/exam-result', this.exam.id]);
-      }
+    if (autoSubmit) {
+      this.finalSubmit();
+    } else {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to go back!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#16a34a', // Tailwind green-600
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, submit it!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.finalSubmit();
+        }
+      });
     }
+  }
+
+  private finalSubmit() {
+    this.examService.submitExamToApi().subscribe({
+      next: () => {
+        if (this.exam) {
+          this.router.navigate(['/exam-result', this.exam.id]);
+        }
+      },
+      error: (err) => {
+        const errorMessage = err.error?.message || 'Something went wrong';
+        Swal.fire({
+          icon: 'error',
+          title: 'Submission Failed',
+          text: errorMessage,
+          confirmButtonColor: '#d33',
+        }).then(() => {
+          this.router.navigate(['/teachers']);
+        });
+      },
+    });
   }
 
   // تنظيف الاشتراكات

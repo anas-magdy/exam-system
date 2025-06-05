@@ -1,6 +1,6 @@
 <nav class="container px-5 py-3 mx-auto flex justify-between items-center">
   <div class="logo">
-    <a href="/" class="flex items-center gap-3">
+    <a routerLink="/" class="flex items-center gap-3">
       <img
         src="logo-3.jfif"
         width="60"
@@ -12,11 +12,27 @@
       </h2>
     </a>
   </div>
+
   <div class="actions">
-    <a
-      href="/login"
-      class="bg-green-600 w-[90px] text-center block py-2 text-lg text-white rounded-md hover:bg-green-700 transition-all"
-      >Login</a
-    >
+    <ng-container *ngIf="isLoggedIn; else showLogin">
+      <!-- ✅ Avatar when logged in -->
+      <img
+        src="https://i.pravatar.cc/40?u=avatar"
+        class="rounded-full cursor-pointer border border-gray-300"
+        width="40"
+        height="40"
+        alt="User Avatar"
+        title="Logged in as {{ role }}"
+      />
+    </ng-container>
+
+    <ng-template #showLogin>
+      <!-- ✅ Login button when NOT logged in -->
+      <a
+        routerLink="/login"
+        class="bg-green-600 w-[90px] text-center block py-2 text-lg text-white rounded-md hover:bg-green-700 transition-all"
+        >Login</a
+      >
+    </ng-template>
   </div>
 </nav>

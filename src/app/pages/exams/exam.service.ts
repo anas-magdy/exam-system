@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, timer, Subscription, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  timer,
+  Subscription,
+  Observable,
+  throwError,
+} from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Exam } from './exam.model';
 import { ExamResult } from './exam-result.model';
 import { map } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root',
@@ -96,18 +103,16 @@ export class ExamService {
     });
   }
 
-  submitExamToApi(): void {
+  submitExamToApi(): Observable<any> {
     const exam = this.currentExam$.value;
-    if (!exam) return;
+    if (!exam) {
+      return throwError(() => new Error('No exam found'));
+    }
 
     const localToken = localStorage.getItem('token');
-    const token =
-      localToken ||
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMyZDUwOGUyLWM5MDktNDU2My05NTI2LTQ2ZDc4MmQwOWUyMiIsInJvbGUiOiJTVFVERU5UIiwiZW1haWwiOiJzYXllZGRkQGdtYWlsLmNvbSIsImlhdCI6MTc0ODk3NTEwOSwiZXhwIjoxNzQ5NTc5OTA5fQ.snfUVJ1noAbTZU3lmRBjOdYf86RQJdT1W-0uMV_Y99s';
+    const token = localToken || 'your-default-token';
 
-    const headers = new HttpHeaders({
-      token: token,
-    });
+    const headers = new HttpHeaders({ token });
 
     const body = {
       examId: exam.id,
@@ -121,30 +126,19 @@ export class ExamService {
             optionId: option.id,
           };
         })
-        .filter(Boolean), // remove nulls
+        .filter(Boolean),
     };
 
-    this.http
-      .post(
-        'https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/student',
-        body,
-        {
-          headers,
-        }
-      )
-      .subscribe({
-        next: (res) => {
-          console.log('✅ Exam submitted successfully to API:', res);
-        },
-        error: (err) => {
-          console.error('❌ Failed to submit exam to API:', err);
-        },
-      });
+    return this.http.post(
+      'https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/student',
+      body,
+      { headers }
+    );
   }
 
-  submitExam(answers: number[]) {
+  submitExam(answers: number[]): Observable<ExamResult> {
     const exam = this.currentExam$.value;
-    if (!exam) return null;
+    if (!exam) return throwError(() => new Error('No exam loaded'));
 
     this.answers = answers;
 
@@ -160,7 +154,7 @@ export class ExamService {
 
     const result: ExamResult = {
       examId: exam.id,
-      studentId: 'current-student-id', // Replace with real ID later
+      studentId: 'current-student-id', // Replace later
       answers,
       score,
       totalScore,
@@ -169,9 +163,10 @@ export class ExamService {
     };
 
     this.saveResult(result);
-    this.submitExamToApi(); //
-    return result;
+
+    return this.submitExamToApi().pipe(map(() => result));
   }
+
   endExam() {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
