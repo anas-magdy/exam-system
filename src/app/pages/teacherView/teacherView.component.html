@@ -25,6 +25,9 @@
 
       @for (item of exams; track $index) {
       <div class="w-full bg-white border border-gray-200 rounded-lg shadow-sm px-6 relative">
+        <button (click)="confirmDelete(item.id)" class="text-red-600 hover:text-red-800 absolute right-2 top-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
         <div class="flex flex-col items-center py-6">
           <div
             class="bg-green-500 w-[100%] flex justify-center items-center rounded-lg text-white p-6 h-[150px] relative">
@@ -42,7 +45,6 @@
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
               Statistics
             </a>
-
           </div>
         </div>
       </div>
