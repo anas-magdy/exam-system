@@ -1,58 +1,57 @@
-<!-- login.component.html -->
-<div class="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
-  <form
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="max-w-md mx-auto p-6 space-y-6 bg-white rounded-lg shadow-md">
+  <!-- إظهار رسالة الخطأ -->
+  <div *ngIf="errorMessage" class="p-3 text-sm text-red-700 bg-red-100 rounded-md">
+    {{ errorMessage }}
+  </div>
 
-    [formGroup]="loginForm"
-    (ngSubmit)="onSubmit()"
-    class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl animate-fade-in-up"
+  <div class="space-y-2">
+    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+    <input
+      type="email"
+      id="email"
+      formControlName="email"
+      placeholder="Enter your email"
+      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
+    >
+    <!-- رسائل التحقق -->
+    <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)"
+         class="text-sm text-red-600">
+      <div *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</div>
+      <div *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</div>
+    </div>
+  </div>
+
+  <div class="space-y-2">
+    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+    <input
+      type="password"
+      id="password"
+      formControlName="password"
+      placeholder="Enter your password"
+      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
+    >
+    <!-- رسائل التحقق -->
+    <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)"
+         class="text-sm text-red-600">
+      <div *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</div>
+      <div *ngIf="loginForm.get('password')?.errors?.['minlength']">
+        Password must be at least 6 characters
+      </div>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end">
+    <a href="#" class="text-sm text-green-600 hover:text-green-500">
+      Forgot password?
+    </a>
+  </div>
+
+  <button
+    type="submit"
+    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 transition-colors duration-200"
+    [disabled]="isLoading"
   >
-    <!-- Header with animated gradient -->
-    <div class="bg-gradient-to-r from-green-400 to-blue-500 p-6 text-center">
-      <h1 class="text-3xl font-bold text-white animate-pulse">Welcome Back!</h1>
-      <p class="text-white/90 mt-2">Login to access your dashboard</p>
-    </div>
-
-    <div class="p-8 space-y-6">
-      <!-- Email Field -->
-      <div class="space-y-2">
-        <label class="block text-gray-700 font-medium">Email</label>
-        <input
-          type="email"
-          formControlName="email"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all"
-          placeholder="your@email.com"
-        >
-      </div>
-
-      <!-- Password Field -->
-      <div class="space-y-2">
-        <label class="block text-gray-700 font-medium">Password</label>
-        <input
-          type="password"
-          formControlName="password"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all"
-          placeholder="••••••••"
-        >
-      </div>
-
-      <!-- Submit Button -->
-      <button
-        type="submit"
-        class="w-full bg-gradient-to-r from-green-400 to-blue-500 text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
-      >
-        Login
-      </button>
-
-      <!-- Animated Register Link -->
-      <div class="pt-4 text-center">
-        <p class="text-gray-600">Don't have an account?</p>
-        <a
-          routerLink="/register"
-          class="inline-block mt-2 text-green-600 font-semibold hover:text-green-700 transition-all duration-300 transform hover:scale-110 hover:underline"
-        >
-          Create Account →
-        </a>
-      </div>
-    </div>
-  </form>
-</div>
+    <span *ngIf="!isLoading">Login</span>
+    <span *ngIf="isLoading">Logging in...</span>
+  </button>
+</form>

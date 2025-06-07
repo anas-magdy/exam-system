@@ -33,6 +33,6 @@ export class NavbarComponent implements OnInit {
   logout() {
     localStorage.removeItem('token');
     this.isLoggedIn = false;
-    this.router.navigate(['/']); // توجيه للصفحة الرئيسية
+    this.router.navigate(['/']);
   }
 }
