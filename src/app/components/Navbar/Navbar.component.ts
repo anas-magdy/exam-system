@@ -1,10 +1,8 @@
-
-
-import { Component, Inject, Injectable, OnInit, PLATFORM_ID } from '@angular/core';
-import { jwtDecode } from 'jwt-decode';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AuthService } from './../../Core/auth/Authntecation.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,35 +11,33 @@ import { isPlatformBrowser } from '@angular/common';
   imports: [CommonModule, RouterModule],
   styleUrls: ['./Navbar.component.css'],
 })
-export class NavbarComponent implements OnInit {
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   role: string | null = null;
+  isScrolled = false;
 
+  private authSubscription!: Subscription;
 
-  private getToken(): string {
-    if (isPlatformBrowser(this.platformId)) {
-      return localStorage.getItem('token') || '';
-    }
-    return '';
-  }
+  constructor(public authService: AuthService, private router: Router) {}
+
   ngOnInit() {
-    const token = this.getToken();
-    if (token) {
-      try {
-        const decoded = jwtDecode<{ role: string }>(token);
-        this.role = decoded.role;
-        this.isLoggedIn = true;
-      } catch (err) {
-        console.error('Invalid token', err);
-        this.isLoggedIn = false;
-      }
-    }
+    this.authSubscription = this.authService.isLoggedIn$.subscribe((status) => {
+      this.isLoggedIn = status;
+      this.role = status ? this.authService.getUserRole() : null;
+    });
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 10;
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this.isLoggedIn = false;
+    this.authService.logout();
     this.router.navigate(['/']);
+  }
+
+  ngOnDestroy() {
+    this.authSubscription?.unsubscribe();
   }
 }

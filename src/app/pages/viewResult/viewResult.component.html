@@ -1,203 +1,158 @@
-@if (hasStudents) {
-<!-- الرسم البياني -->
-<div class="max-w-sm w-full bg-white rounded-lg shadow-sm p-4 md:p-6 mx-auto">
-  <div class="py-6" id="pie-chart"></div>
-</div>
+<!-- viewResult.component.html -->
 
-<!-- الإحصائيات -->
-<div class="flex justify-center w-full">
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-6xl px-4 mt-6"
-  >
-    <!-- Completed Exams -->
-    <div
-      class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative flex justify-between items-center"
-    >
-      <div>
-        <div
-          class="absolute left-0 top-0 h-full w-2 bg-blue-500 rounded-l-2xl"
-        ></div>
-        <h3 class="text-gray-500 text-sm font-medium mb-1">Completed Exams</h3>
-        <p class="text-2xl font-bold text-gray-800">{{ students.length }}</p>
-      </div>
-      <div
-        class="bg-blue-500 w-10 h-10 rounded-full text-white flex justify-center items-center text-lg"
-      >
-        <i class="fa-solid fa-clipboard-question"></i>
-      </div>
-    </div>
-
-    <!-- Total Questions -->
-    <div
-      class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative flex justify-between items-center"
-    >
-      <div>
-        <div
-          class="absolute left-0 top-0 h-full w-2 bg-pink-500 rounded-l-2xl"
-        ></div>
-        <h3 class="text-gray-500 text-sm font-medium mb-1">Total Questions</h3>
-        <p class="text-2xl font-bold text-gray-800">{{ examLength }}</p>
-      </div>
-      <div
-        class="bg-pink-500 w-10 h-10 rounded-full text-white flex justify-center items-center text-xl"
-      >
-        <i class="fa-regular fa-circle-question"></i>
-      </div>
-    </div>
-
-    <!-- Pass Ratio -->
-    <div
-      class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative flex justify-between items-center text-xl"
-    >
-      <div>
-        <div
-          class="absolute left-0 top-0 h-full w-2 bg-fuchsia-600 rounded-l-2xl"
-        ></div>
-        <h3 class="text-gray-500 text-sm font-medium mb-1">Pass Ratio</h3>
-        <p class="text-2xl font-bold text-gray-800">{{ passRetio }}%</p>
-      </div>
-      <div
-        class="bg-fuchsia-600 w-10 h-10 rounded-full flex justify-center items-center text-white text-xl"
-      >
-        <i class="fa-regular fa-circle-check"></i>
-      </div>
-    </div>
+<!-- حالة التحميل -->
+<div *ngIf="loading" class="flex items-center justify-center min-h-[400px]">
+  <div class="flex flex-col items-center space-y-4">
+    <div class="w-12 h-12 border-4 border-red-500 border-dashed rounded-full animate-spin"></div>
+    <p class="text-gray-600 text-sm">Loading results, please wait...</p>
   </div>
 </div>
 
-<!-- جدول النتائج -->
-<div
-  class="overflow-x-auto rounded-lg shadow-lg px-4 md:px-8 py-4 bg-white mt-10"
->
-  <table
-    id="pagination-table"
-    class="w-full text-sm text-left text-gray-700 my-10"
-  >
-    <thead class="text-xs text-white uppercase bg-green-400">
-      <tr>
-        <th
-          scope="col"
-          class="px-6 py-3 cursor-pointer bg-green-400 hover:bg-green-500 transition-colors"
-        >
-          <span class="flex items-center">
-            Student Name
-            <svg
-              class="w-3 h-3 ml-1.5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
-              />
-            </svg>
-          </span>
-        </th>
-        <th
-          scope="col"
-          class="px-6 py-3 cursor-pointer bg-green-400 hover:bg-green-500 transition-colors"
-        >
-          <span class="flex items-center">
-            Email
-            <svg
-              class="w-3 h-3 ml-1.5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
-              />
-            </svg>
-          </span>
-        </th>
-        <th
-          scope="col"
-          class="px-6 py-3 cursor-pointer bg-green-400 hover:bg-green-500 transition-colors"
-        >
-          <span class="flex items-center">
-            Grade
-            <svg
-              class="w-3 h-3 ml-1.5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
-              />
-            </svg>
-          </span>
-        </th>
-        <th
-          scope="col"
-          class="px-6 py-3 cursor-pointer bg-green-400 hover:bg-green-500 transition-colors"
-        >
-          <span class="flex items-center">
-            Status
-            <svg
-              class="w-3 h-3 ml-1.5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
-              />
-            </svg>
-          </span>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (item of students; track item.id) {
-      <tr class="bg-white border-b hover:bg-green-100 transition-colors">
-        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          {{ item.student.user.name }}
-        </td>
-        <td class="px-6 py-4 font-medium">{{ item.student.user.email }}</td>
-        <td class="px-6 py-4 font-medium">{{ item.percentage }}</td>
-        <td
-          class="px-6 py-4 font-medium"
-          [class.text-green-600]="item.status === 'passed'"
-          [class.text-yellow-600]="item.status === 'accepted'"
-          [class.text-red-600]="item.status === 'failed'"
-        >
-          {{ item.status }}
-        </td>
-      </tr>
-      }
-    </tbody>
-  </table>
-</div>
-
-} @if(!loading && !hasStudents){
-
-<div
-  class="max-w-md mx-auto mt-20 p-8 rounded-3xl bg-white shadow-2xl backdrop-blur-md border border-gray-100 text-center animate-fade-in-scale"
->
+<!-- حالة لا يوجد طلاب -->
+<div *ngIf="!loading && !hasStudents"
+  class="max-w-md mx-auto mt-20 p-8 rounded-3xl bg-white shadow-2xl backdrop-blur-md border border-gray-100 text-center animate-fade-in-scale">
   <div
-    class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg"
-  >
+    class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg">
     <i class="fa-solid fa-circle-info text-white text-3xl"></i>
   </div>
   <h2 class="text-2xl font-bold text-gray-800 mb-3">No Students Yet</h2>
   <p class="text-gray-500 text-base leading-relaxed">
-    Once students complete the exam, their results will appear in this section.
-    Please check back later.
+    Once students complete the exam, their results will appear in this section. Please check back later.
   </p>
 </div>
-} @if (loading) {
-<div class="flex items-center justify-center min-h-[400px]">
-  <div class="flex flex-col items-center space-y-4">
-    <div
-      class="w-12 h-12 border-4 border-red-500 border-dashed rounded-full animate-spin"
-    ></div>
-    <p class="text-gray-600 text-sm">Loading results, please wait...</p>
+
+<!-- النتائج -->
+<div *ngIf="hasStudents">
+  <!-- الرسم البياني -->
+     <app-pie-chart [accepted]="stats.accepted" [pass]="stats.passed" [faild]="stats.failed"></app-pie-chart>
+
+  <!-- الإحصائيات -->
+  <div class="flex justify-center w-full">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-6xl px-4 mt-6">
+
+      <!-- Completed Exams -->
+      <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative flex justify-between items-center">
+        <div>
+          <div class="absolute left-0 top-0 h-full w-2 bg-blue-500 rounded-l-2xl"></div>
+          <h3 class="text-gray-500 text-sm font-medium mb-1">Completed Exams</h3>
+          <p class="text-2xl font-bold text-gray-800">{{ students.length }}</p>
+        </div>
+        <div class="bg-blue-500 w-10 h-10 rounded-full text-white flex justify-center items-center text-lg">
+          <i class="fa-solid fa-clipboard-question"></i>
+        </div>
+      </div>
+
+      <!-- Total Questions -->
+      <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative flex justify-between items-center">
+        <div>
+          <div class="absolute left-0 top-0 h-full w-2 bg-pink-500 rounded-l-2xl"></div>
+          <h3 class="text-gray-500 text-sm font-medium mb-1">Total Questions</h3>
+          <p class="text-2xl font-bold text-gray-800">{{ examLength }}</p>
+        </div>
+        <div class="bg-pink-500 w-10 h-10 rounded-full text-white flex justify-center items-center text-xl">
+          <i class="fa-regular fa-circle-question"></i>
+        </div>
+      </div>
+
+      <!-- Pass Ratio -->
+      <div
+        class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative flex justify-between items-center text-xl">
+        <div>
+          <div class="absolute left-0 top-0 h-full w-2 bg-fuchsia-600 rounded-l-2xl"></div>
+          <h3 class="text-gray-500 text-sm font-medium mb-1">Pass Ratio</h3>
+          <p class="text-2xl font-bold text-gray-800">{{ passRetio }}%</p>
+        </div>
+        <div class="bg-fuchsia-600 w-10 h-10 rounded-full flex justify-center items-center text-white text-xl">
+          <i class="fa-regular fa-circle-check"></i>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- جدول الطلاب -->
+  <div class="overflow-x-auto rounded-lg shadow-lg px-4 md:px-8 py-4 bg-white mt-10">
+    <div class="mb-4 flex justify-between items-center">
+      <div class="relative w-full max-w-xs">
+        <input type="text" [(ngModel)]="searchText" (input)="filterStudents()" placeholder="Search students..."
+          class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+        <i class="fa-solid fa-search absolute left-3 top-3 text-gray-400"></i>
+      </div>
+    </div>
+
+    <table class="w-full text-sm text-left text-gray-700 my-4">
+      <thead class="text-xs text-white uppercase bg-green-400">
+        <tr>
+          <th scope="col" class="px-6 py-3 cursor-pointer hover:bg-green-500 transition-colors"
+            (click)="sortTable('name')">
+            <span class="flex items-center">
+              Student Name
+              <i class="fas fa-sort ml-2"></i>
+            </span>
+          </th>
+          <th scope="col" class="px-6 py-3 cursor-pointer hover:bg-green-500 transition-colors"
+            (click)="sortTable('email')">
+            <span class="flex items-center">
+              Email
+              <i class="fas fa-sort ml-2"></i>
+            </span>
+          </th>
+          <th scope="col" class="px-6 py-3 cursor-pointer hover:bg-green-500 transition-colors"
+            (click)="sortTable('percentage')">
+            <span class="flex items-center">
+              Grade
+              <i class="fas fa-sort ml-2"></i>
+            </span>
+          </th>
+          <th scope="col" class="px-6 py-3 cursor-pointer hover:bg-green-500 transition-colors"
+            (click)="sortTable('status')">
+            <span class="flex items-center">
+              Status
+              <i class="fas fa-sort ml-2"></i>
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of paginatedStudents; trackBy: trackById"
+          class="bg-white border-b hover:bg-green-100 transition-colors">
+          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ item.student.user.name }}</td>
+          <td class="px-6 py-4 font-medium">{{ item.student.user.email }}</td>
+          <td class="px-6 py-4 font-medium">{{ item.percentage }}</td>
+          <td class="px-6 py-4 font-medium" [ngClass]="{
+                'text-green-600': item.status === 'passed',
+                'text-yellow-600': item.status === 'accepted',
+                'text-red-600': item.status === 'failed'
+              }">
+            {{ item.status }}
+          </td>
+        </tr>
+        <tr *ngIf="filteredStudents.length === 0">
+          <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+            No matching students found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div *ngIf="filteredStudents.length > itemsPerPage" class="flex justify-between items-center mt-4">
+      <div class="text-sm text-gray-500">
+        Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+        {{ getMin(currentPage * itemsPerPage, filteredStudents.length) }}
+        of {{ filteredStudents.length }} entries
+      </div>
+      <div class="flex space-x-2">
+        <button (click)="prevPage()" [disabled]="currentPage === 1"
+          class="px-3 py-1 border rounded-md disabled:opacity-50">Previous</button>
+        <button *ngFor="let page of getPageNumbers()" (click)="goToPage(page)"
+          [class.bg-green-500]="page === currentPage" [class.text-white]="page === currentPage"
+          class="px-3 py-1 border rounded-md hover:bg-green-100">
+          {{ page }}
+        </button>
+        <button (click)="nextPage()" [disabled]="currentPage * itemsPerPage >= filteredStudents.length"
+          class="px-3 py-1 border rounded-md disabled:opacity-50">Next</button>
+      </div>
+    </div>
   </div>
 </div>
-}
