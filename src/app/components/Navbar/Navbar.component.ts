@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { jwtDecode } from 'jwt-decode';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router'; // ✅ لازم Router
+import { Router, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AuthService } from './../../Core/auth/Authntecation.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,29 +11,33 @@ import { Router, RouterModule } from '@angular/router'; // ✅ لازم Router
   imports: [CommonModule, RouterModule],
   styleUrls: ['./Navbar.component.css'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   role: string | null = null;
+  isScrolled = false;
 
-  constructor(private router: Router) {}
+  private authSubscription!: Subscription;
+
+  constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded = jwtDecode<{ role: string }>(token);
-        this.role = decoded.role;
-        this.isLoggedIn = true;
-      } catch (err) {
-        console.error('Invalid token', err);
-        this.isLoggedIn = false;
-      }
-    }
+    this.authSubscription = this.authService.isLoggedIn$.subscribe((status) => {
+      this.isLoggedIn = status;
+      this.role = status ? this.authService.getUserRole() : null;
+    });
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 10;
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this.isLoggedIn = false;
+    this.authService.logout();
     this.router.navigate(['/']);
+  }
+
+  ngOnDestroy() {
+    this.authSubscription?.unsubscribe();
   }
 }

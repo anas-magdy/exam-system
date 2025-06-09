@@ -4,10 +4,11 @@ import { FlowbitService } from '../ui/flowbit.service';
 import { initFlowbite } from 'flowbite';
 import { AddQuizComponent } from './pages/AddQuiz/AddQuiz.component';
 import { NavbarComponent } from './components/Navbar/Navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

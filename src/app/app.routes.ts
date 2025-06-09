@@ -5,7 +5,6 @@ import { ExamQuestionsComponent } from './pages/exams/exam-questions/exam-questi
 import { TeacherExamsComponent } from './pages/teachers/teacher-exams/teacher-exams.component';
 import { ExamResultComponent } from './pages/exams/exam-result/exam-result/exam-result.component';
 
-
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
@@ -62,7 +61,8 @@ export const routes: Routes = [
   {
     path: 'editQuiz/:id',
     loadComponent: () =>
-      import('./pages/EditQuiz/EditQuiz.component').then((m) => m.EditQuizComponent)
-  }
-  
+      import('./pages/EditQuiz/EditQuiz.component').then(
+        (m) => m.EditQuizComponent
+      ),
+  },
 ];

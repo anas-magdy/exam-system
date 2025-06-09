@@ -1,30 +1,61 @@
-<nav class="px-5 py-3 mx-auto flex justify-between items-center">
+<nav
+  class="px-5 py-3 mx-auto flex justify-between items-center sticky top-0 bg-white shadow-sm z-50 transition-all duration-300"
+  [class.scrolled]="isScrolled"
+>
+  <!-- Logo Section -->
   <div class="logo">
-    <a routerLink="/" class="flex items-center gap-3">
-      <img
-        src="logo-3.jfif"
-        width="60"
-        class="rounded-full"
-        alt="Quiz App Logo"
-      />
-      <h2 class="text-2xl font-bold">
-        Exam <span class="text-green-600">System</span>
+    <a
+      routerLink="/"
+      class="flex items-center gap-1 hover:opacity-90 transition-opacity"
+    >
+      <div
+        class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center mr-3"
+      >
+        <i class="fas fa-graduation-cap text-white text-xl"></i>
+      </div>
+      <h2 class="text-3xl font-bold">
+        It<span class="text-green-600">Q</span>an
       </h2>
     </a>
   </div>
 
+  <!-- Actions Section -->
   <div class="actions">
     <ng-container *ngIf="isLoggedIn; else showLogin">
-      <!-- ✅ Avatar when logged in -->
+      <!-- Avatar when logged in -->
       <div class="flex items-center gap-4">
-        <img
-          src="https://i.pravatar.cc/40?u=avatar"
-          class="rounded-full border border-gray-300"
-          width="40"
-          height="40"
-          alt="User Avatar"
-          title="Logged in as {{ role }}"
-        />
+        <div class="relative group">
+          <img
+            src="https://i.pravatar.cc/40?u=avatar"
+            class="rounded-full border border-gray-300 cursor-pointer hover:border-green-500 transition-all"
+            width="40"
+            height="40"
+            alt="User Avatar"
+            [title]="'Logged in as ' + role"
+          />
+          <!-- Dropdown Menu -->
+          <div
+            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 invisible group-hover:visible transition-all opacity-0 group-hover:opacity-100"
+          >
+            <div class="px-4 py-2 text-sm text-gray-700 border-b">
+              <div class="font-medium">
+                {{ "User" }}
+              </div>
+              <div class="text-green-600">{{ role }}</div>
+            </div>
+            <a
+              routerLink="/profile"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >Profile</a
+            >
+            <a
+              *ngIf="role === 'admin'"
+              routerLink="/admin"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >Admin Panel</a
+            >
+          </div>
+        </div>
 
         <button
           (click)="logout()"
@@ -36,10 +67,10 @@
     </ng-container>
 
     <ng-template #showLogin>
-      <!-- ✅ Login button when NOT logged in -->
+      <!-- Login button when NOT logged in -->
       <a
         routerLink="/login"
-        class="bg-green-600 w-[90px] text-center block py-2 text-lg text-white rounded-md hover:bg-green-700 transition-all"
+        class="bg-green-600 w-[90px] text-center block py-2 text-lg text-white rounded-md hover:bg-green-700 transition-all hover:shadow-md"
         >Login</a
       >
     </ng-template>
