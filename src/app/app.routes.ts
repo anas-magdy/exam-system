@@ -4,6 +4,8 @@ import { Routes } from '@angular/router';
 import { ExamQuestionsComponent } from './pages/exams/exam-questions/exam-questions.component';
 import { TeacherExamsComponent } from './pages/teachers/teacher-exams/teacher-exams.component';
 import { ExamResultComponent } from './pages/exams/exam-result/exam-result/exam-result.component';
+import { AboutUsComponent } from './components/about-us/about-us.component';
+import { FeaturesComponent } from './components/features/features.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -24,6 +26,14 @@ export const routes: Routes = [
   {
     path: 'exam-result/:id',
     component: ExamResultComponent,
+  },
+  {
+    path: 'about-us',
+    component: AboutUsComponent,
+  },
+  {
+    path: 'features',
+    component: FeaturesComponent,
   },
   {
     path: 'login',
