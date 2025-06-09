@@ -1,0 +1,50 @@
+.fade-in-up {
+  animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-animation:nth-child(1) {
+  animation-delay: 0s;
+}
+.stagger-animation:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.stagger-animation:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.stagger-animation:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+.team-card {
+  transition: all 0.3s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-8px);
+}
+
+.counter-animation {
+  animation: countUp 2s ease-out;
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
