@@ -6,7 +6,7 @@ import { TeacherExamsComponent } from './pages/teachers/teacher-exams/teacher-ex
 import { ExamResultComponent } from './pages/exams/exam-result/exam-result/exam-result.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { FeaturesComponent } from './components/features/features.component';
-
+import { AuthGuard } from './Core/auth/auth.guard';
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
@@ -21,11 +21,20 @@ export const routes: Routes = [
         (m) => m.TeachersComponent
       ),
   },
-  { path: 'teachers/:teacherId/exams', component: TeacherExamsComponent },
-  { path: 'exam/:examId', component: ExamQuestionsComponent },
+  {
+    path: 'teachers/:teacherId/exams',
+    component: TeacherExamsComponent,
+    canActivate: [AuthGuard] // محمية
+  },
+  {
+    path: 'exam/:examId',
+    component: ExamQuestionsComponent,
+    canActivate: [AuthGuard] // محمية
+  },
   {
     path: 'exam-result/:id',
     component: ExamResultComponent,
+    canActivate: [AuthGuard] // محمية
   },
   {
     path: 'about-us',
@@ -53,6 +62,7 @@ export const routes: Routes = [
       import('./pages/AddQuiz/AddQuiz.component').then(
         (m) => m.AddQuizComponent
       ),
+    canActivate: [AuthGuard] // محمية
   },
   {
     path: 'view-quiz/:id/:length',
@@ -60,6 +70,7 @@ export const routes: Routes = [
       import('./pages/viewResult/viewResult.component').then(
         (m) => m.ViewResultComponent
       ),
+    canActivate: [AuthGuard] // محمية
   },
   {
     path: 'teacherViewExams',
@@ -67,6 +78,7 @@ export const routes: Routes = [
       import('./pages/teacherView/teacherView.component').then(
         (m) => m.TeacherViewComponent
       ),
+    canActivate: [AuthGuard] // محمية
   },
   {
     path: 'editQuiz/:id',
@@ -74,5 +86,13 @@ export const routes: Routes = [
       import('./pages/EditQuiz/EditQuiz.component').then(
         (m) => m.EditQuizComponent
       ),
+    canActivate: [AuthGuard] // محمية
+  }, {
+    path: 'contact',
+    loadComponent: () =>
+      import('./pages/ContactUs/ContactUs.component').then(
+        (m) => m.ContactUsComponent
+      ),
   },
 ];
+
