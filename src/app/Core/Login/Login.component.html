@@ -1,7 +1,9 @@
-<!-- login.component.html -->
-<div class="min-h-screen flex items-center justify-center">
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
-    class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl animate-fade-in-up">
+<div class="min-h-screen flex items-center justify-center p-4">
+  <form
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
+    class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl animate-fade-in-up"
+  >
     <!-- Header -->
     <div class="bg-green-600 p-6 text-center">
       <h1 class="text-3xl font-bold text-white animate-pulse">Welcome Back!</h1>
@@ -12,41 +14,50 @@
       <!-- Email Field -->
       <div class="space-y-2">
         <label class="block text-gray-700 font-medium">Email</label>
-        <input type="email" formControlName="email"
+        <input
+          type="email"
+          formControlName="email"
           class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#5AC756] focus:border-transparent transition-all"
-          placeholder="your@email.com" />
+          placeholder="your@email.com"
+        />
         <!-- Email Validation Errors -->
-        <div *ngIf="
-            loginForm.get('email')?.invalid &&
-            (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)
-          " class="text-red-500 text-sm mt-1">
-          <div *ngIf="loginForm.get('email')?.errors?.['required']">
-            Email is required
-          </div>
-          <div *ngIf="loginForm.get('email')?.errors?.['email']">
-            Please enter a valid email
-          </div>
+        <div
+          *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)"
+          class="text-red-500 text-sm mt-1"
+        >
+          <div *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</div>
+          <div *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</div>
         </div>
       </div>
 
       <!-- Password Field -->
       <div class="space-y-2">
         <label class="block text-gray-700 font-medium">Password</label>
-        <input type="password" formControlName="password"
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#5AC756] focus:border-transparent transition-all"
-          placeholder="••••••••" />
+        <div class="relative">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            class="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#5AC756] focus:border-transparent transition-all"
+            placeholder="Enter your password"
+          />
+          <button
+            type="button"
+            (click)="togglePasswordVisibility()"
+            class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+            tabindex="-1"
+          >
+            <!-- Eye icon when hidden -->
+          {{ showPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
+
         <!-- Password Validation Errors -->
-        <div *ngIf="
-            loginForm.get('password')?.invalid &&
-            (loginForm.get('password')?.dirty ||
-              loginForm.get('password')?.touched)
-          " class="text-red-500 text-sm mt-1">
-          <div *ngIf="loginForm.get('password')?.errors?.['required']">
-            Password is required
-          </div>
-          <div *ngIf="loginForm.get('password')?.errors?.['minlength']">
-            Password must be at least 6 characters
-          </div>
+        <div
+          *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)"
+          class="text-red-500 text-sm mt-1"
+        >
+          <div *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</div>
+          <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</div>
         </div>
       </div>
 
@@ -56,17 +67,32 @@
       </div>
 
       <!-- Submit Button -->
-      <button type="submit"
+      <button
+        type="submit"
         class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed"
-        [disabled]="isLoading">
+        [disabled]="isLoading"
+      >
         <span *ngIf="!isLoading">Login</span>
         <span *ngIf="isLoading" class="flex items-center justify-center">
-          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-            </path>
+          <svg
+            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
           </svg>
           Processing...
         </span>
@@ -75,8 +101,10 @@
       <!-- Register Link -->
       <div class="pt-4 text-center">
         <p class="text-gray-600">Don't have an account?</p>
-        <a routerLink="/register"
-          class="inline-block mt-2 text-green-600 font-semibold hover:text-green-700 transition-all duration-300 transform hover:scale-110 hover:underline">
+        <a
+          routerLink="/register"
+          class="inline-block mt-2 text-green-600 font-semibold hover:text-green-700 transition-all duration-300 transform hover:scale-110 hover:underline"
+        >
           Create Account →
         </a>
       </div>
