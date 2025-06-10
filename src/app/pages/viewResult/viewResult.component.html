@@ -147,7 +147,13 @@
             (click)="sortTable('percentage')"
           >
             <span class="flex items-center">
-              Grade
+              Percentage
+              <i class="fas fa-sort ml-2"></i>
+            </span>
+          </th>
+          <th scope="col" class="px-6 py-3 cursor-pointer hover:bg-green-500 transition-colors" (click)="sortTable('percentage')">
+            <span class="flex items-center">
+              score
               <i class="fas fa-sort ml-2"></i>
             </span>
           </th>
@@ -173,6 +179,7 @@
           </td>
           <td class="px-6 py-4 font-medium">{{ item.student.user.email }}</td>
           <td class="px-6 py-4 font-medium">{{ item.percentage }}</td>
+          <td class="px-6 py-4 font-medium">{{ item.score }}</td>
           <td
             class="px-6 py-4 font-medium"
             [ngClass]="{
