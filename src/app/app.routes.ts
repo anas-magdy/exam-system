@@ -30,17 +30,20 @@ export const routes: Routes = [
   {
     path: 'teachers/:teacherId/exams',
     component: TeacherExamsComponent,
-    canActivate: [AuthGuard], // محمية
+    canActivate: [AuthGuard],
+    data: { renderMode: 'client' }, // ✅ منع الـ prerender هنا
   },
   {
     path: 'exam/:examId',
     component: ExamQuestionsComponent,
-    canActivate: [AuthGuard], // محمية
+    canActivate: [AuthGuard],
+    data: { renderMode: 'client' }, // اختياري لو فيها مشاكل
   },
   {
     path: 'exam-result/:id',
     component: ExamResultComponent,
-    canActivate: [AuthGuard], // محمية
+    canActivate: [AuthGuard],
+    data: { renderMode: 'client' }, // ✅ منع الـ prerender هنا
   },
   {
     path: 'about-us',
@@ -80,7 +83,7 @@ export const routes: Routes = [
       import('./pages/AddQuiz/AddQuiz.component').then(
         (m) => m.AddQuizComponent
       ),
-    canActivate: [AuthGuard], // محمية
+    canActivate: [AuthGuard],
   },
   {
     path: 'view-quiz/:id/:length',
@@ -88,7 +91,8 @@ export const routes: Routes = [
       import('./pages/viewResult/viewResult.component').then(
         (m) => m.ViewResultComponent
       ),
-    canActivate: [AuthGuard], // محمية
+    canActivate: [AuthGuard],
+    data: { renderMode: 'client' }, // ✅ منع الـ prerender هنا
   },
   {
     path: 'teacherViewExams',
@@ -96,7 +100,7 @@ export const routes: Routes = [
       import('./pages/teacherView/teacherView.component').then(
         (m) => m.TeacherViewComponent
       ),
-    canActivate: [AuthGuard], // محمية
+    canActivate: [AuthGuard],
   },
   {
     path: 'editQuiz/:id',
@@ -104,7 +108,8 @@ export const routes: Routes = [
       import('./pages/EditQuiz/EditQuiz.component').then(
         (m) => m.EditQuizComponent
       ),
-    canActivate: [AuthGuard], // محمية
+    canActivate: [AuthGuard],
+    data: { renderMode: 'client' }, // ✅ منع الـ prerender هنا
   },
   {
     path: 'contact',
@@ -128,3 +133,4 @@ export const routes: Routes = [
       ),
   },
 ];
+

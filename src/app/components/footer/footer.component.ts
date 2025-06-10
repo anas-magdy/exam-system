@@ -22,11 +22,13 @@ export class FooterComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router
   ) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // scroll لأعلى مع أنيميشن
-      }
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          window.scrollTo({ top: 0, behavior: 'smooth' }); // scroll لأعلى مع أنيميشن
+        }
+      });
+    }
   }
 
   ngOnInit(): void {
