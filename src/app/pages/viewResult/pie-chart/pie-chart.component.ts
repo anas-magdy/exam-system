@@ -16,6 +16,7 @@ export class PieChartComponent implements OnInit {
     { name: 'Accepted', value: 0 },
     { name: 'Faild', value: 0 },
   ];
+  chartView: [number, number] = [600, 450];
 
   colorScheme: any = {
     domain: ['#226522', '#ffe628', '#ff2626'],
