@@ -1,23 +1,30 @@
-<div class="border border-green-500 py-10 flex justify-center items-center rounded-md md:px-10">
-  <label for="quizName" class="text-2xl block text-nowrap font-bold">Quiz Name</label>
-  <input type="text" [(ngModel)]="quizName" class="rounded-md mx-2 w-[85%]">
-
-</div>
-<div class="flex gap-4 mt-3">
-  <div class="w-full md:w-1/2 border border-green-500 py-5 flex justify-center items-center rounded-md md:px-10">
-    <label for="grade" class="text-xl block text-nowrap font-bold">Grade</label>
-    <input type="text" [(ngModel)]="grade" class="rounded-md mx-2 w-[85%]">
-  </div>
-  <div class="w-full md:w-1/2 border border-green-500 py-5 flex justify-start items-center rounded-md md:px-10">
-    <label for="duration" class="text-xl block text-nowrap font-bold">Duration</label>
-    <input type="text" [(ngModel)]="duration" class="rounded-md mx-2 w-[70%]"> Min
-  </div>
+<!-- Quiz Name Input -->
+<div class="border border-green-500 py-6 px-4 flex flex-col md:flex-row justify-center items-center rounded-md gap-4">
+  <label for="quizName" class="text-2xl font-bold whitespace-nowrap">Quiz Name</label>
+  <input type="text" [(ngModel)]="quizName" class="rounded-md w-full md:w-[85%] p-2 border border-gray-300">
 </div>
 
+<!-- Grade and Duration Inputs -->
+<div class="flex flex-col md:flex-row gap-4 mt-3">
+  <div
+    class="w-full md:w-1/2 border border-green-500 py-5 px-4 flex flex-col md:flex-row justify-center items-center rounded-md gap-4">
+    <label for="grade" class="text-xl font-bold whitespace-nowrap">Grade</label>
+    <input type="text" [(ngModel)]="grade" class="rounded-md w-full md:w-[85%] p-2 border border-gray-300">
+  </div>
+  <div
+    class="w-full md:w-1/2 border border-green-500 py-5 px-4 flex flex-col md:flex-row justify-start items-center rounded-md gap-2">
+    <label for="duration" class="text-xl font-bold whitespace-nowrap">Duration</label>
+    <div class="flex items-center w-full md:w-[70%] gap-2">
+      <input type="text" [(ngModel)]="duration" class="rounded-md w-full p-2 border border-gray-300">
+      <span>Min</span>
+    </div>
+  </div>
+</div>
 
+<!-- Questions Accordion -->
 <div class="border-2 p-3 rounded-md mt-10">
-  <div class="head flex items-center">
-    <h2 class="text-xl font-bold mb-2">Quiz Questions :</h2>
+  <div class="flex items-center mb-2">
+    <h2 class="text-xl font-bold">Quiz Questions:</h2>
   </div>
 
   <div id="accordion-collapse" data-accordion="collapse">
@@ -25,38 +32,42 @@
     <div class="border border-gray-200 mb-2 rounded-md">
       <h2>
         <button type="button"
-          class="flex items-center justify-between w-full p-4 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl hover:bg-gray-100"
+          class="flex items-center justify-between w-full p-4 font-medium text-gray-500 border border-b-0 rounded-t-xl hover:bg-gray-100"
           (click)="toggleAccordion(i)">
-          <span class="text-xl text-black">
-            Question {{ i + 1 }}
-            <!-- : {{item.theQuestion}} -->
-          </span>
-          <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" [ngClass]="{ 'rotate-180': activeIndex === i }"
-            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <span class="text-xl text-black">Question {{ i + 1 }}</span>
+          <svg data-accordion-icon class="w-6 h-6 transition-transform duration-300"
+            [ngClass]="{ 'rotate-180': activeIndex === i }" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd"
               d="M5.23 7.21a.75.75 0 011.06.02L10 10.586l3.71-3.355a.75.75 0 111.02 1.1l-4 3.75a.75.75 0 01-1.02 0l-4-3.75a.75.75 0 01.02-1.06z"
-              clip-rule="evenodd"></path>
+              clip-rule="evenodd" />
           </svg>
         </button>
       </h2>
       <div [hidden]="activeIndex !== i">
-        <div class="p-4 border border-t-0 border-gray-200">
+        <div class="p-4 border border-t-0">
           <app-Question [question]="item" [ind]="i" (delete)="handleDeleteQuestion($event)"></app-Question>
         </div>
       </div>
     </div>
     }
   </div>
-  <button type="button"
-    class="mt-2 ml-2 p-3 rounded-lg text-white bg-green-600 font-medium text-sm text-center me-2 mb-2 flex self-center"
-    (click)="handelAddQuestion()">
-    Add new Question
-  </button>
 
-
+  <!-- Add Question Button -->
+  <div class="flex justify-center mt-4">
+    <button type="button"
+      class="p-3 rounded-lg text-white bg-green-600 font-medium text-sm text-center hover:bg-green-700"
+      (click)="handelAddQuestion()">
+      Add new Question
+    </button>
+  </div>
 </div>
-<button type="button"
-  class="mt-2 p-3 rounded-lg text-white bg-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium text-sm text-center me-2 mb-2"
-  (click)="handelOnSubmit()">
-  Save Quiz
-</button>
+
+<!-- Save Quiz Button -->
+<div class="flex justify-center my-6">
+  <button type="button"
+    class="p-3 rounded-lg text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 shadow-lg font-medium text-sm"
+    (click)="handelOnSubmit()">
+    Save Quiz
+  </button>
+</div>
