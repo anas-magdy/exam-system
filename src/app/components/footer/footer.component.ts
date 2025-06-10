@@ -6,19 +6,28 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
 
   styleUrls: ['./footer.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
 })
 export class FooterComponent implements OnInit, OnDestroy {
   showBackToTop = false;
   private scrollListener?: () => void;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private router: Router
+  ) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // scroll لأعلى مع أنيميشن
+      }
+    });
+  }
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
