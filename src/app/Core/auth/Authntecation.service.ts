@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, tap, catchError, BehaviorSubject } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../../environments/environments';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl =
-    'https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/auth';
+  private apiUrl = `${environment.apiBaseUrl}/auth`;
   private tokenKey = 'token';
   private loggedIn = new BehaviorSubject<boolean>(this.hasValidToken());
   isLoggedIn$ = this.loggedIn.asObservable();

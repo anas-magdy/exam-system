@@ -1,3 +1,4 @@
+import { environment } from '../../../../src/environments/environments';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
@@ -29,7 +30,7 @@ export interface Teacher {
     createdAt: string;
     updatedAt: string;
   };
-  Exam?: Exam[]; // إضافة خاصية اختيارية للامتحانات
+  Exam?: Exam[];
   examCount?: number;
 }
 
@@ -71,8 +72,7 @@ export interface TeacherWithExams {
   providedIn: 'root',
 })
 export class TeacherService {
-  private apiUrl =
-    'https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/teacher';
+  private apiUrl = `${environment.apiBaseUrl}/teacher`;
   private cachedTeachers: Teacher[] = [];
 
   constructor(private http: HttpClient) {}
@@ -135,9 +135,7 @@ export class TeacherService {
   getTeacherExams(teacherId: string): Observable<any[]> {
     return this.http
       .get<{ message: string; data: any }>(`${this.apiUrl}/${teacherId}/exams`)
-      .pipe(
-        map((response) => response.data.Exam || []) // نأخذ مصفوفة Exam من البيانات
-      );
+      .pipe(map((response) => response.data.Exam || []));
   }
 
   getTeacherExamCount(teacherId: string): Observable<number> {
@@ -170,7 +168,6 @@ export class TeacherService {
             error.error &&
             error.error.message === 'teacher exams not exist'
           ) {
-            // بدل رمي الخطأ، رجع بيانات 'لا يوجد امتحانات' بشكل طبيعي
             return of({
               id: '',
               user: { name: '' },
@@ -180,7 +177,7 @@ export class TeacherService {
             });
           }
 
-          let errorMessage = 'حدث خطأ أثناء تحميل الامتحانات';
+          let errorMessage = 'Error when fetching exams';
 
           if (error.error && error.error.message) {
             errorMessage = error.error.message;
@@ -191,7 +188,6 @@ export class TeacherService {
       );
   }
 
-  // دالة لتحديث البيانات المخزنة إذا لزم الأمر
   refreshTeachers(): Observable<Teacher[]> {
     this.cachedTeachers = [];
     return this.getAllTeachers();
