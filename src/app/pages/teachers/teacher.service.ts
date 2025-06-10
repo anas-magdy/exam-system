@@ -29,6 +29,7 @@ export interface Teacher {
     role: string;
     createdAt: string;
     updatedAt: string;
+    userProfile: string;
   };
   Exam?: Exam[];
   examCount?: number;
