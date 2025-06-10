@@ -46,6 +46,7 @@ register(userData: FormData): Observable<any> {
   return this.http.post(`${this.apiUrl}/register`, userData).pipe(
     catchError(error => {
       let errorMessage = 'Registration failed';
+      console.log(error);
 
       if (error.status === 400 && error.error?.message) {
         errorMessage = error.error.message;
@@ -57,6 +58,7 @@ register(userData: FormData): Observable<any> {
       }
 
       throw new Error(errorMessage);
+
     })
   );
 }
