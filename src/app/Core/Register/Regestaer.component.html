@@ -1,220 +1,198 @@
-<form
-  [formGroup]="registerForm"
-  class="max-w-2xl mx-auto p-8 my-20 space-y-6 bg-white rounded-lg shadow-lg"
-  (ngSubmit)="onSubmit()"
-  enctype="multipart/form-data"
->
-  <!-- Form Header -->
-  <div class="text-center">
-    <h2 class="text-2xl font-bold text-gray-800">Create Your Account</h2>
-    <p class="text-gray-600 mt-1">Join as either a student or teacher</p>
-  </div>
-
-  <!-- User Type Selection -->
-  <div class="space-y-3">
-    <label class="block text-sm font-medium text-gray-700">Register As</label>
-    <div class="flex space-x-4">
-      <button
-        type="button"
-        [class.bg-green-600]="userType === 'TEACHER'"
-        [class.bg-gray-200]="userType !== 'TEACHER'"
-        [class.text-white]="userType === 'TEACHER'"
-        [class.text-gray-700]="userType !== 'TEACHER'"
-        class="px-6 py-3 rounded-md font-medium transition-colors duration-200 flex-1"
-        (click)="onUserTypeChange('TEACHER')"
-      >
-        Teacher
-      </button>
-      <button
-        type="button"
-        [class.bg-green-600]="userType === 'STUDENT'"
-        [class.bg-gray-200]="userType !== 'STUDENT'"
-        [class.text-white]="userType === 'STUDENT'"
-        [class.text-gray-700]="userType !== 'STUDENT'"
-        class="px-6 py-3 rounded-md font-medium transition-colors duration-200 flex-1"
-        (click)="onUserTypeChange('STUDENT')"
-      >
-        Student
-      </button>
-    </div>
-  </div>
-
-  <!-- Common Fields -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- Column 1 -->
-    <div class="space-y-4">
-      <div class="space-y-2">
-        <label for="name" class="block text-sm font-medium text-gray-700"
-          >Name</label
-        >
-        <!-- تغيير من Username إلى Name -->
-        <input
-          type="text"
-          id="name"
-          formControlName="name"
-          placeholder="Enter your name"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-colors duration-200"
-        />
-        <div
-          *ngIf="
-            registerForm.get('name')?.invalid &&
-            registerForm.get('name')?.touched
-          "
-          class="text-red-500 text-xs"
-        >
-          Name is required
-        </div>
-      </div>
-
-      <div class="space-y-2">
-        <label for="age" class="block text-sm font-medium text-gray-700"
-          >Age</label
-        >
-        <input
-          type="number"
-          id="age"
-          formControlName="age"
-          min="10"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-colors duration-200"
-        />
-        <div
-          *ngIf="
-            registerForm.get('age')?.invalid && registerForm.get('age')?.touched
-          "
-          class="text-red-500 text-xs"
-        >
-          Valid age is required (minimum 10)
-        </div>
-      </div>
+<!-- register.component.html -->
+<div class="min-h-screen flex items-center justify-center p-4 bg-[#F7FDF9]">
+  <form
+    [formGroup]="registerForm"
+    (ngSubmit)="onSubmit()"
+    class="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl animate-fade-in-up"
+    enctype="multipart/form-data"
+  >
+    <!-- Header -->
+    <div class="bg-[#5AC756] p-6 text-center">
+      <h1 class="text-3xl font-bold text-white animate-pulse">Create Your Account</h1>
+      <p class="text-white/90 mt-2">Join as either a student or teacher</p>
     </div>
 
-    <!-- Column 2 -->
-    <div class="space-y-4">
-      <div class="space-y-2">
-        <label for="email" class="block text-sm font-medium text-gray-700"
-          >Email</label
-        >
-        <input
-          type="email"
-          id="email"
-          formControlName="email"
-          placeholder="Enter your email"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-colors duration-200"
-        />
-        <div
-          *ngIf="
-            registerForm.get('email')?.invalid &&
-            registerForm.get('email')?.touched
-          "
-          class="text-red-500 text-xs"
-        >
-          Valid email is required
+    <div class="p-8 space-y-6">
+      <!-- User Type Selection -->
+      <div class="space-y-3">
+        <label class="block text-sm font-medium text-gray-700">Register As</label>
+        <div class="flex space-x-4">
+          <button
+            type="button"
+            [class.bg-[#5AC756]]="userType === 'TEACHER'"
+            [class.text-white]="userType === 'TEACHER'"
+            [class.bg-gray-200]="userType !== 'TEACHER'"
+            [class.text-gray-700]="userType !== 'TEACHER'"
+            class="px-6 py-3 rounded-md font-medium transition-all duration-300 flex-1 shadow-md hover:shadow-lg"
+            (click)="onUserTypeChange('TEACHER')"
+          >
+            Teacher
+          </button>
+          <button
+            type="button"
+            [class.bg-[#5AC756]]="userType === 'STUDENT'"
+            [class.text-white]="userType === 'STUDENT'"
+            [class.bg-gray-200]="userType !== 'STUDENT'"
+            [class.text-gray-700]="userType !== 'STUDENT'"
+            class="px-6 py-3 rounded-md font-medium transition-all duration-300 flex-1 shadow-md hover:shadow-lg"
+            (click)="onUserTypeChange('STUDENT')"
+          >
+            Student
+          </button>
         </div>
       </div>
 
+      <!-- Common Fields -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Name -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Name</label>
+          <input
+            type="text"
+            formControlName="name"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#5AC756] focus:border-transparent"
+            placeholder="Enter your name"
+          >
+          <div *ngIf="registerForm.get('name')?.invalid && (registerForm.get('name')?.dirty || registerForm.get('name')?.touched || formSubmitted)" class="text-red-500 text-sm">
+            <div *ngIf="registerForm.get('name')?.errors?.['required']">Name is required</div>
+            <div *ngIf="registerForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters</div>
+          </div>
+        </div>
+
+        <!-- Age -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Age</label>
+          <input
+            type="number"
+            formControlName="age"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#5AC756] focus:border-transparent"
+            min="10"
+          >
+          <div *ngIf="registerForm.get('age')?.invalid && (registerForm.get('age')?.dirty || registerForm.get('age')?.touched || formSubmitted)" class="text-red-500 text-sm">
+            <div *ngIf="registerForm.get('age')?.errors?.['required']">Age is required</div>
+            <div *ngIf="registerForm.get('age')?.errors?.['min']">Minimum age is 10</div>
+            <div *ngIf="registerForm.get('age')?.errors?.['max']">Maximum age is 100</div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            formControlName="email"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#5AC756] focus:border-transparent"
+            placeholder="Enter your email"
+          >
+          <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched || formSubmitted)" class="text-red-500 text-sm">
+            <div *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</div>
+            <div *ngIf="registerForm.get('email')?.errors?.['email']">Invalid email format</div>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Password</label>
+          <input
+            type="password"
+            formControlName="password"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#5AC756] focus:border-transparent"
+            placeholder="Enter your password"
+          >
+          <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched || formSubmitted)" class="text-red-500 text-sm">
+            <div *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</div>
+            <div *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters</div>
+            <div *ngIf="registerForm.get('password')?.errors?.['pattern']">Password must include uppercase, lowercase, and number</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
       <div class="space-y-2">
-        <label for="password" class="block text-sm font-medium text-gray-700"
-          >Password</label
-        >
+        <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
         <input
           type="password"
-          id="password"
-          formControlName="password"
-          placeholder="Enter your password"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-colors duration-200"
-        />
-        <p class="text-xs text-gray-500 mt-1">
-          Must be at least 8 characters with uppercase, lowercase, and number
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Confirm Password (Full width) -->
-  <div class="space-y-2">
-    <label for="confirmPassword" class="block text-sm font-medium text-gray-700"
-      >Confirm Password</label
-    >
-    <input
-      type="password"
-      id="confirmPassword"
-      formControlName="confirmPassword"
-      placeholder="Confirm your password"
-      class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-colors duration-200"
-    />
-  </div>
-
-  <!-- Teacher Specific Fields -->
-  <div *ngIf="userType === 'TEACHER'" class="space-y-6 border-t pt-6">
-    <h3 class="text-lg font-medium text-gray-800">Teacher Information</h3>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="space-y-2">
-        <label for="subjectName" class="block text-sm font-medium text-gray-700"
-          >Subject Name</label
+          formControlName="confirmPassword"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#5AC756] focus:border-transparent"
+          placeholder="Confirm password"
         >
-        <input
-          type="text"
-          id="subjectName"
-          formControlName="subjectName"
-          placeholder="What do you teach?"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-colors duration-200"
-        />
-      </div>
-
-      <div class="space-y-2">
-        <label for="idCardImage" class="block text-sm font-medium text-gray-700"
-          >National ID Image</label
-        >
-        <input
-          type="file"
-          id="idCardImage"
-          (change)="onFileSelected($event)"
-          accept="image/*"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-colors duration-200"
-        />
-        <div
-          *ngIf="!idCardImage && userType === 'TEACHER' && formSubmitted"
-          class="text-red-500 text-xs"
-        >
-          National ID image is required for teachers
+        <div *ngIf="registerForm.get('confirmPassword')?.invalid && (registerForm.get('confirmPassword')?.dirty || registerForm.get('confirmPassword')?.touched || formSubmitted)" class="text-red-500 text-sm">
+          <div *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Confirmation is required</div>
+          <div *ngIf="registerForm.errors?.['passwordMismatch']">Passwords do not match</div>
         </div>
       </div>
+
+      <!-- Teacher Fields -->
+      <div *ngIf="userType === 'TEACHER'" class="border-t pt-6 space-y-6">
+        <h3 class="text-lg font-medium text-gray-800">Teacher Info</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Subject</label>
+            <input
+              type="text"
+              formControlName="subjectName"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#5AC756] focus:border-transparent"
+              placeholder="e.g. Mathematics"
+            >
+            <div *ngIf="formSubmitted && registerForm.get('subjectName')?.invalid" class="text-red-500 text-sm">
+              Subject name is required
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">National ID Image <span class="text-red-500">*</span></label>
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#5AC756] focus:border-transparent"
+            >
+            <p class="text-xs text-gray-500 mt-1">JPEG, PNG, JFIF (Max 2MB)</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Profile Photo (Optional)</label>
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#5AC756] focus:border-transparent"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="errorMessage" class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded">
+        <p>{{ errorMessage }}</p>
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="w-full bg-[#5AC756] text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed"
+        [disabled]="isLoading"
+      >
+        <span *ngIf="!isLoading">Register Now</span>
+        <span *ngIf="isLoading" class="flex items-center justify-center">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4zm2 5.3A8 8 0 014 12H0c0 3 1.1 5.8 3 7.9l3-2.6z" />
+          </svg>
+          Processing...
+        </span>
+      </button>
+
+      <!-- Login Redirect -->
+      <div class="pt-4 text-center">
+        <p class="text-gray-600">Already have an account?</p>
+        <a
+          routerLink="/login"
+          class="inline-block mt-2 text-[#5AC756] font-semibold hover:text-[#5AC756] transition-all duration-300 transform hover:scale-110 hover:underline"
+        >
+          ← Back to Login
+        </a>
+      </div>
     </div>
-  </div>
-
-  <!-- Error Messages -->
-  <div
-    *ngIf="registerForm.errors?.['passwordMismatch'] && (registerForm.get('password')?.touched || registerForm.get('confirmPassword')?.touched)"
-    class="p-3 bg-red-50 text-red-600 rounded-md text-sm"
-  >
-    <span class="font-medium">Error:</span> Passwords do not match.
-  </div>
-
-  <div
-    *ngIf="errorMessage"
-    class="p-3 bg-red-50 text-red-600 rounded-md text-sm"
-  >
-    <span class="font-medium">Error:</span> {{ errorMessage }}
-  </div>
-
-  <!-- Submit Button -->
-  <div class="pt-4">
-    <button
-      type="submit"
-      class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 transition-colors duration-200"
-    >
-      Register Now
-    </button>
-  </div>
-
-  <!-- Login Link -->
-  <div class="text-center text-sm text-gray-600">
-    Already have an account?
-    <a
-      routerLink="/login"
-      class="text-green-600 hover:text-green-700 font-medium"
-      >Sign in</a
-    >
-  </div>
-</form>
+  </form>
+</div>

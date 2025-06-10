@@ -1,85 +1,76 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, tap, catchError, BehaviorSubject } from 'rxjs';
+import { map, Observable, tap, catchError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-import { environment } from '../../../environments/environments';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.apiBaseUrl}/auth`;
+  private apiUrl = 'https://examsestembackend-production.up.railway.app/api/v1/auth';
   private tokenKey = 'token';
-  private loggedIn = new BehaviorSubject<boolean>(this.hasValidToken());
-  isLoggedIn$ = this.loggedIn.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  login(credentials: {
-    email: string;
-    password: string;
-  }): Observable<{ token: string }> {
-    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
-      tap((response) => {
-        console.log('Full API response:', response);
+login(credentials: { email: string; password: string }): Observable<{token: string}> {
+  return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+    tap(response => {
+      const token = response?.token || response?.access_token || response?.data?.token || response?.data;
 
-        const token =
-          response?.token ||
-          response?.access_token ||
-          response?.data?.token ||
-          response?.data;
+      if (!token || typeof token !== 'string') {
+        throw new Error('No token found in response');
+      }
 
-        if (!token || typeof token !== 'string') {
-          throw new Error('No token found in response');
-        }
+      this.setToken(token);
+    }),
+    map(response => ({
+      token: response?.token || response?.access_token || response?.data?.token || response?.data
+    })),
+    catchError(error => {
+      let errorMessage = 'Login failed';
 
-        this.setToken(token);
-      }),
-      map((response) => ({
-        token:
-          response?.token ||
-          response?.access_token ||
-          response?.data?.token ||
-          response?.data,
-      })),
-      catchError((error) => {
-        console.error('Login error:', error);
-        throw error;
-      })
-    );
-  }
+      if (error.status === 401) {
+        errorMessage = 'Invalid email or password';
+      } else if (error.error?.message) {
+        errorMessage = error.error.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
 
-  register(userData: FormData): Observable<any> {
-    console.log('Registering user with data:');
-    userData.forEach((value, key) => console.log(key, value));
-    return this.http.post(`${this.apiUrl}/register`, userData).pipe(
-      tap((response) => console.log('Registration response:', response)),
-      catchError((error) => {
-        console.error('Registration failed:', error);
-        throw error;
-      })
-    );
-  }
+      throw new Error(errorMessage);
+    })
+  );
+}
+
+register(userData: FormData): Observable<any> {
+  return this.http.post(`${this.apiUrl}/register`, userData).pipe(
+    catchError(error => {
+      let errorMessage = 'Registration failed';
+
+      if (error.status === 400 && error.error?.message) {
+        errorMessage = error.error.message;
+      } else if (error.error?.errors) {
+        // Format validation errors from backend
+        errorMessage = Object.values(error.error.errors).join('\n');
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      throw new Error(errorMessage);
+    })
+  );
+}
 
   setToken(token: string): void {
-    if (typeof window !== 'undefined' && localStorage) {
-      localStorage.setItem(this.tokenKey, token);
-      this.loggedIn.next(true);
-    }
+    localStorage.setItem(this.tokenKey, token);
   }
 
   getToken(): string | null {
-    if (typeof window !== 'undefined' && localStorage) {
-      return localStorage.getItem(this.tokenKey);
-    }
-    return null;
+    return localStorage.getItem(this.tokenKey);
   }
 
   logout(): void {
-    if (typeof window !== 'undefined' && localStorage) {
-      localStorage.removeItem(this.tokenKey);
-      this.loggedIn.next(false);
-    }
+    localStorage.removeItem(this.tokenKey);
   }
 
   isLoggedIn(): boolean {
@@ -96,18 +87,6 @@ export class AuthService {
 
   private isTokenExpired(decodedToken: any): boolean {
     return decodedToken.exp * 1000 < Date.now();
-  }
-
-  private hasValidToken(): boolean {
-    const token = this.getToken();
-    if (!token) return false;
-
-    try {
-      const decoded: any = jwtDecode(token);
-      return !!decoded && !this.isTokenExpired(decoded);
-    } catch {
-      return false;
-    }
   }
 
   getUserRole(): string | null {
