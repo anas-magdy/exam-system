@@ -86,6 +86,7 @@ export class TeacherService {
       .get<{ message: string; data: Teacher[] }>(this.apiUrl)
       .pipe(
         map((response) => {
+          console.log(response);
           const teachersWithExamCount = response.data.map((teacher) => ({
             ...teacher,
             examCount: teacher.Exam?.length || 0,
