@@ -26,6 +26,16 @@ export class RegisterComponent {
   formSubmitted = false;
   errorMessage = '';
   isLoading = false;
+  showPassword = false;
+  showConfirmPassword = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
 
   constructor(
     private fb: FormBuilder,

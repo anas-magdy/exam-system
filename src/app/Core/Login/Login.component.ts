@@ -15,6 +15,11 @@ export class LoginComponent {
   loginForm: FormGroup;
   errorMessage = '';
   isLoading = false;
+  showPassword = false;
+
+  togglePasswordVisibility() {
+  this.showPassword = !this.showPassword;
+}
 
   constructor(
     private fb: FormBuilder,
@@ -62,7 +67,7 @@ onSubmit() {
       } else if (error.error?.message) {
         this.errorMessage = error.error.message;
       } else {
-        this.errorMessage = 'Login failed. Please try again later.';
+        this.errorMessage = error;
       }
 
       console.error('Login error:', error);
