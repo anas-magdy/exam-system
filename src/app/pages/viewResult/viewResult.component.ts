@@ -1,10 +1,18 @@
-
-import { Component, ElementRef, OnInit, ViewChild, PLATFORM_ID, Inject, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  PLATFORM_ID,
+  Inject,
+  AfterViewInit,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { PieChartComponent } from './pie-chart/pie-chart.component'
+import { PieChartComponent } from './pie-chart/pie-chart.component';
+import { environment } from '../../../environments/environments';
 
 interface ExamStats {
   accepted: number;
@@ -15,14 +23,11 @@ interface ExamStats {
   selector: 'app-view-result',
   templateUrl: './viewResult.component.html',
   styleUrls: ['./viewResult.component.css'],
-  imports: [
-    PieChartComponent,
-    FormsModule,
-    CommonModule
-  ],
+  imports: [PieChartComponent, FormsModule, CommonModule],
 })
 export class ViewResultComponent implements OnInit, AfterViewInit {
-  @ViewChild('pieChartContainer', { static: false }) pieChartContainer!: ElementRef;
+  @ViewChild('pieChartContainer', { static: false })
+  pieChartContainer!: ElementRef;
 
   students: any[] = [];
   filteredStudents: any[] = [];
@@ -41,43 +46,55 @@ export class ViewResultComponent implements OnInit, AfterViewInit {
   sortKey: string = '';
   sortAsc: boolean = true;
   quizId: any;
-
+  private apiBaseUrl = environment.apiBaseUrl;
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    @Inject(PLATFORM_ID) private platformId: Object,
-  ) { }
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   async ngOnInit() {
-    this.quizId = this.route.snapshot.paramMap.get('id')
-    this.examLength = Number(this.route.snapshot.paramMap.get('length'))
+    this.quizId = this.route.snapshot.paramMap.get('id');
+    this.examLength = Number(this.route.snapshot.paramMap.get('length'));
     this.fetchResults();
     // await this.drawChart()
   }
 
   fetchResults(): void {
     this.loading = true;
-    this.http.get<any>(`https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/exam/${this.quizId}/students`).subscribe(
-      {
-        next: async (res) => {
-          console.log(res)
+    this.http
+      .get<any>(`${this.apiBaseUrl}/exam/${this.quizId}/students`)
+      .subscribe({
+        next: (res) => {
+          console.log(res);
           this.students = res.data.student || [];
           this.hasStudents = this.students.length > 0;
-          this.stats = res.data.stats
-          console.log(this.stats)
-          this.passRetio = Number((((this.stats.passed + this.stats.accepted) / this.students.length) * 100).toFixed(2))
+          this.stats = res.data.stats;
+          console.log(this.stats);
+
+          const totalStudents = this.students.length;
+          this.passRetio =
+            totalStudents > 0
+              ? Number(
+                  (
+                    ((this.stats.passed + this.stats.accepted) /
+                      totalStudents) *
+                    100
+                  ).toFixed(2)
+                )
+              : 0;
+
           this.filterStudents();
-
-          this.loading = false
-        }
-      }
-    )
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error fetching results:', err);
+          this.loading = false;
+        },
+      });
   }
 
-  async ngAfterViewInit() {
-
-
-  }
+  async ngAfterViewInit() {}
 
   // async drawChart() {
   //   if (!isPlatformBrowser(this.platformId)) return;
@@ -123,11 +140,15 @@ export class ViewResultComponent implements OnInit, AfterViewInit {
   //   }
   // }
 
-
   filterStudents(): void {
-    this.filteredStudents = this.students.filter((student) =>
-      student.student.user.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      student.student.user.email.toLowerCase().includes(this.searchText.toLowerCase())
+    this.filteredStudents = this.students.filter(
+      (student) =>
+        student.student.user.name
+          .toLowerCase()
+          .includes(this.searchText.toLowerCase()) ||
+        student.student.user.email
+          .toLowerCase()
+          .includes(this.searchText.toLowerCase())
     );
     this.currentPage = 1;
     this.updatePaginatedStudents();
@@ -159,7 +180,9 @@ export class ViewResultComponent implements OnInit, AfterViewInit {
   }
 
   getPageNumbers(): number[] {
-    const totalPages = Math.ceil(this.filteredStudents.length / this.itemsPerPage);
+    const totalPages = Math.ceil(
+      this.filteredStudents.length / this.itemsPerPage
+    );
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 

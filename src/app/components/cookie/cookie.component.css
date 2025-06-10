@@ -1,0 +1,26 @@
+/* Custom styling for cookie policy */
+section h2 {
+  position: relative;
+  padding-bottom: 0.5rem;
+  margin-top: 2.5rem;
+}
+
+section:first-child h2 {
+  margin-top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  section h2 {
+    font-size: 1.5rem;
+  }
+
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}

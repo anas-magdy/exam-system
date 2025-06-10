@@ -6,6 +6,9 @@ import { TeacherExamsComponent } from './pages/teachers/teacher-exams/teacher-ex
 import { ExamResultComponent } from './pages/exams/exam-result/exam-result/exam-result.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { FeaturesComponent } from './components/features/features.component';
+import { PrivacyPolicyComponent } from './components/privacy/privacy.component';
+import { TermsComponent } from './components/terms/terms.component';
+import { CookieComponent } from './components/cookie/cookie.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -34,6 +37,18 @@ export const routes: Routes = [
   {
     path: 'features',
     component: FeaturesComponent,
+  },
+  {
+    path: 'privacy',
+    component: PrivacyPolicyComponent,
+  },
+  {
+    path: 'terms',
+    component: TermsComponent,
+  },
+  {
+    path: 'cookie',
+    component: CookieComponent,
   },
   {
     path: 'login',

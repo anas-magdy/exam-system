@@ -1,3 +1,5 @@
+import { environment } from '../../../../src/environments/environments';
+
 import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
@@ -25,18 +27,16 @@ export class ExamService {
   constructor(private http: HttpClient) {}
 
   fetchExamFromApi(examId: string) {
-    const url = `https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/exam/${examId}`;
+    const url = `${environment.apiBaseUrl}/exam/${examId}`;
 
-    // ✅ نحاول نجيب التوكن من localStorage
     const localToken = localStorage.getItem('token');
 
-    // ✅ لو مفيش توكن، نستخدم الافتراضي
     const token =
       localToken ||
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMyZDUwOGUyLWM5MDktNDU2My05NTI2LTQ2ZDc4MmQwOWUyMiIsInJvbGUiOiJTVFVERU5UIiwiZW1haWwiOiJzYXllZGRkQGdtYWlsLmNvbSIsImlhdCI6MTc0ODk3NTEwOSwiZXhwIjoxNzQ5NTc5OTA5fQ.snfUVJ1noAbTZU3lmRBjOdYf86RQJdT1W-0uMV_Y99s'; // ← ضيف التوكن الافتراضي هنا
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMyZDUwOGUyLWM5MDktNDU2My05NTI2LTQ2ZDc4MmQwOWUyMiIsInJvbGUiOiJTVFVERU5UIiwiZW1haWwiOiJzYXllZGRkQGdtYWlsLmNvbSIsImlhdCI6MTc0ODk3NTEwOSwiZXhwIjoxNzQ5NTc5OTA5fQ.snfUVJ1noAbTZU3lmRBjOdYf86RQJdT1W-0uMV_Y99s';
 
     const headers = new HttpHeaders({
-      token: token, // بدون Bearer
+      token: token,
     });
 
     return this.http.get<any>(url, { headers }).pipe(
@@ -137,11 +137,9 @@ export class ExamService {
         .filter(Boolean),
     };
 
-    return this.http.post<any>(
-      'https://static-teri-sayedmahmoud223-ec4bee33.koyeb.app/api/v1/student',
-      body,
-      { headers }
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}/student`, body, {
+      headers,
+    });
   }
 
   submitExam(answers: number[]): Observable<ExamResult> {
@@ -156,7 +154,7 @@ export class ExamService {
         const studentId = response.data.studentId;
         const totalQuestions = response.totalQuestions;
 
-        const totalScore = totalQuestions * 10; // 🔥 نحسبها من السيرفر
+        const totalScore = totalQuestions * 10;
         const percentage = Math.round((scoreFromApi / totalScore) * 100);
 
         const result: ExamResult = {

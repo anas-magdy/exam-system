@@ -1,0 +1,18 @@
+/* Custom styling for terms content */
+section h2 {
+  position: relative;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e5e7eb; /* gray-200 */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  section h2 {
+    font-size: 1.5rem;
+  }
+}
