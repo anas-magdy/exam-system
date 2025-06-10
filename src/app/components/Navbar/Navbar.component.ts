@@ -21,10 +21,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.authSubscription = this.authService.isLoggedIn$.subscribe((status) => {
-      this.isLoggedIn = status;
-      this.role = status ? this.authService.getUserRole() : null;
-    });
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.role = this.isLoggedIn ? this.authService.getUserRole() : null;
   }
 
   @HostListener('window:scroll')
@@ -37,7 +35,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
-  ngOnDestroy() {
+    ngOnDestroy() {
     this.authSubscription?.unsubscribe();
   }
+
 }
