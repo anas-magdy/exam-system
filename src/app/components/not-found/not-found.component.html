@@ -1,0 +1,81 @@
+<div
+  class="min-h-screen flex items-center justify-center relative overflow-hidden bg-gray-50"
+>
+  <!-- عناصر الزينة الخلفية -->
+  <div class="absolute inset-0 overflow-hidden opacity-20">
+    <div
+      class="absolute top-20 left-10 w-32 h-32 rounded-full bg-green-100"
+    ></div>
+    <div
+      class="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-green-200"
+    ></div>
+    <div
+      class="absolute top-1/3 right-1/4 w-24 h-24 rounded-full bg-green-300"
+    ></div>
+  </div>
+
+  <!-- المحتوى الرئيسي -->
+  <div class="container mx-auto px-6 text-center relative z-10 py-6">
+    <div class="max-w-4xl mx-auto">
+      <!-- شعار الخطأ -->
+      <div
+        class="inline-block px-6 py-2 bg-white rounded-full text-red-600 font-medium mb-8 shadow-md border border-red-100"
+      >
+        Error 404
+      </div>
+
+      <!-- العنوان الرئيسي -->
+      <h1
+        class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-gray-800"
+      >
+        Page Not
+        <span class="text-red-600 relative">
+          Found
+          <span
+            class="absolute -inset-2 bg-red-100 rounded-lg -z-10 opacity-60"
+          ></span>
+        </span>
+      </h1>
+
+      <!-- الوصف -->
+      <p
+        class="text-xl md:text-2xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed"
+      >
+        The page you are looking for might have been removed, had its name
+        changed, or is temporarily unavailable.
+      </p>
+
+      <!-- زر العودة للصفحة الرئيسية -->
+      <div class="mt-8">
+        <a
+          routerLink="/"
+          class="bg-green-600 inline-block w-[180px] mx-auto py-3 px-4 text-lg text-white rounded-md hover:bg-green-700 transition-all shadow-lg hover:shadow-xl"
+        >
+          <i class="fas fa-home mr-2"></i> Return Home
+        </a>
+      </div>
+
+      <!-- ميزات سريعة -->
+      <div class="flex flex-wrap justify-center gap-6 mt-16">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div class="text-3xl font-bold text-green-600">
+            <i class="fas fa-search"></i>
+          </div>
+          <div class="text-gray-500 mt-2">Check the URL</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div class="text-3xl font-bold text-green-600">
+            <i class="fas fa-redo"></i>
+          </div>
+          <div class="text-gray-500 mt-2">Refresh Page</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div class="text-3xl font-bold text-green-600">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="text-gray-500 mt-2">Contact Support</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

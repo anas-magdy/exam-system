@@ -10,7 +10,6 @@ import { PrivacyPolicyComponent } from './components/privacy/privacy.component';
 import { TermsComponent } from './components/terms/terms.component';
 import { CookieComponent } from './components/cookie/cookie.component';
 
-
 import { AuthGuard } from './Core/auth/auth.guard';
 
 export const routes: Routes = [
@@ -26,21 +25,22 @@ export const routes: Routes = [
       import('./pages/teachers/teachers.component').then(
         (m) => m.TeachersComponent
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'teachers/:teacherId/exams',
     component: TeacherExamsComponent,
-    canActivate: [AuthGuard] // محمية
+    canActivate: [AuthGuard], // محمية
   },
   {
     path: 'exam/:examId',
     component: ExamQuestionsComponent,
-    canActivate: [AuthGuard] // محمية
+    canActivate: [AuthGuard], // محمية
   },
   {
     path: 'exam-result/:id',
     component: ExamResultComponent,
-    canActivate: [AuthGuard] // محمية
+    canActivate: [AuthGuard], // محمية
   },
   {
     path: 'about-us',
@@ -80,7 +80,7 @@ export const routes: Routes = [
       import('./pages/AddQuiz/AddQuiz.component').then(
         (m) => m.AddQuizComponent
       ),
-    canActivate: [AuthGuard] // محمية
+    canActivate: [AuthGuard], // محمية
   },
   {
     path: 'view-quiz/:id/:length',
@@ -88,7 +88,7 @@ export const routes: Routes = [
       import('./pages/viewResult/viewResult.component').then(
         (m) => m.ViewResultComponent
       ),
-    canActivate: [AuthGuard] // محمية
+    canActivate: [AuthGuard], // محمية
   },
   {
     path: 'teacherViewExams',
@@ -96,7 +96,7 @@ export const routes: Routes = [
       import('./pages/teacherView/teacherView.component').then(
         (m) => m.TeacherViewComponent
       ),
-    canActivate: [AuthGuard] // محمية
+    canActivate: [AuthGuard], // محمية
   },
   {
     path: 'editQuiz/:id',
@@ -104,13 +104,27 @@ export const routes: Routes = [
       import('./pages/EditQuiz/EditQuiz.component').then(
         (m) => m.EditQuizComponent
       ),
-    canActivate: [AuthGuard] // محمية
-  }, {
+    canActivate: [AuthGuard], // محمية
+  },
+  {
     path: 'contact',
     loadComponent: () =>
       import('./pages/ContactUs/ContactUs.component').then(
         (m) => m.ContactUsComponent
       ),
   },
+  {
+    path: 'pricing',
+    loadComponent: () =>
+      import('./components/pricing/pricing.component').then(
+        (m) => m.PricingComponent
+      ),
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./components/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent
+      ),
+  },
 ];
-
