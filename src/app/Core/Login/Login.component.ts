@@ -49,10 +49,13 @@ export class LoginComponent {
       next: (response) => {
         this.isLoading = false;
         const role = this.authService.getUserRole();
-
+        console.log(response);
         if (role === 'TEACHER') {
+          console.log(response);
+
           this.router.navigate(['/teacherViewExams']);
         } else if (role === 'STUDENT') {
+          console.log(response);
           this.router.navigate(['/teachers']);
         } else {
           this.router.navigate(['/home']);
@@ -67,7 +70,7 @@ export class LoginComponent {
         } else if (error.error?.message) {
           this.errorMessage = error.error.message;
         } else {
-          this.errorMessage = error;
+          this.errorMessage = 'Login failed. Please try again later.';
         }
 
         console.error('Login error:', error);

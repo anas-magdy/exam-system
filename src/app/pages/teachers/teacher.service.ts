@@ -29,7 +29,9 @@ export interface Teacher {
     role: string;
     createdAt: string;
     updatedAt: string;
-    userProfile: string;
+    userProfile: {
+      secure_url: '';
+    };
   };
   Exam?: Exam[];
   examCount?: number;
@@ -86,7 +88,7 @@ export class TeacherService {
       .get<{ message: string; data: Teacher[] }>(this.apiUrl)
       .pipe(
         map((response) => {
-          console.log(response);
+          console.log(response.data);
           const teachersWithExamCount = response.data.map((teacher) => ({
             ...teacher,
             examCount: teacher.Exam?.length || 0,

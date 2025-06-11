@@ -11,21 +11,47 @@ export class AuthService {
     'https://examsestembackend-production.up.railway.app/api/v1/auth';
   private tokenKey = 'token';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
+  private userInfoSubject = new BehaviorSubject<{
+    name: string;
+    userProfile: any;
+  } | null>(null);
+
+  userInfo$ = this.userInfoSubject.asObservable();
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // ✅ تأكد أننا داخل المتصفح وليس SSR
+    if (typeof window !== 'undefined') {
+      const name = localStorage.getItem('userName');
+      const profileStr = localStorage.getItem('userProfile');
+
+      if (name) {
+        try {
+          const profile = profileStr ? JSON.parse(profileStr) : null;
+          this.userInfoSubject.next({
+            name,
+            userProfile: profile,
+          });
+        } catch {
+          this.userInfoSubject.next({
+            name,
+            userProfile: null,
+          });
+        }
+      }
+    }
+  }
 
   login(credentials: {
     email: string;
     password: string;
-  }): Observable<{ token: string }> {
+  }): Observable<{ token: string; name: string; userProfile: any }> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap((response) => {
-        const token =
-          response?.token ||
-          response?.access_token ||
-          response?.data?.token ||
-          response?.data;
+        console.log('Login response:', response);
+
+        const token = response?.data?.token;
+        const user = response?.data?.user;
 
         if (!token || typeof token !== 'string') {
           throw new Error('No token found in response');
@@ -33,14 +59,27 @@ export class AuthService {
 
         this.setToken(token);
         this.isLoggedInSubject.next(true);
+
+        // ✅ تحديث بيانات المستخدم في BehaviorSubject
+        this.userInfoSubject.next({
+          name: user?.name || '',
+          userProfile: user?.userProfile || null,
+        });
+
+        // ✅ تخزين في localStorage لو حبيت تستخدمه كـ fallback
+        localStorage.setItem('userName', user?.name || '');
+        localStorage.setItem(
+          'userProfile',
+          JSON.stringify(user?.userProfile || null)
+        );
       }),
-      map((response) => ({
-        token:
-          response?.token ||
-          response?.access_token ||
-          response?.data?.token ||
-          response?.data,
-      })),
+      map((response) => {
+        return {
+          token: response?.data?.token,
+          name: response?.data?.user?.name,
+          userProfile: response?.data?.user?.userProfile,
+        };
+      }),
       catchError((error) => {
         let errorMessage = 'Login failed';
 
@@ -88,8 +127,13 @@ export class AuthService {
 
   logout(): void {
     if (typeof window === 'undefined') return;
+
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem('userName'); // ← إزالة الاسم
+    localStorage.removeItem('userProfile'); // ← إزالة الصورة
+
     this.isLoggedInSubject.next(false);
+    this.userInfoSubject.next(null); // ← تصفير بيانات المستخدم
   }
 
   isLoggedIn(): boolean {
