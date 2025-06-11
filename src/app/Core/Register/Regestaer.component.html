@@ -1,4 +1,11 @@
 <div class="min-h-screen flex items-center justify-center p-4 bg-[#F7FDF9]">
+  <div class="flex flex-col md:flex-row items-center justify-center gap-x-28 w-full max-w-4xl">
+  <!-- SVG Image -->
+    <div class="hidden md:block w-3/5 max-w-md animate-fade-in-left">
+      <img src="/SignUp-bro.svg" alt="Mobile registration" class="w-full h-auto">
+    </div>
+
+    <!-- Registration Form -->
   <form
     [formGroup]="registerForm"
     (ngSubmit)="onSubmit()"
@@ -103,7 +110,7 @@
           <button
             type="button"
             (click)="togglePasswordVisibility()"
-            class="absolute top-9 right-3 text-gray-500"
+            class="absolute top-7 right-3 text-gray-500"
             tabindex="-1"
           >
             {{ showPassword ? '🙈' : '👁️' }}
@@ -128,7 +135,7 @@
         <button
           type="button"
           (click)="toggleConfirmPasswordVisibility()"
-          class="absolute top-9 right-3 text-gray-500"
+          class="absolute top-7 right-3 text-gray-500"
           tabindex="-1"
         >
           {{ showConfirmPassword ? '🙈' : '👁️' }}
@@ -218,4 +225,5 @@
       </div>
     </div>
   </form>
+  </div>
 </div>
