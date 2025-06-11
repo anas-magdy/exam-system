@@ -15,6 +15,11 @@ export class LoginComponent {
   loginForm: FormGroup;
   errorMessage = '';
   isLoading = false;
+  showPassword = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
   constructor(
     private fb: FormBuilder,

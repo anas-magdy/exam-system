@@ -1,50 +1,57 @@
 <div class="flex flex-col border-2 rounded-md mt-3">
+  <!-- Delete Button -->
   <button (click)="handleDelete()" class="text-red-600 font-bold text-2xl hover:scale-110 flex self-end mr-2 mt-2">
     <i class="fa-solid fa-xmark"></i>
   </button>
-  
-  <div class="flex  p-5 my-2 justify-center items-center ">
-    <div class="w-1/6 text-xl text-center flex">
-      <span
-        class="size-10 text-white bg-green-600 hover:bg-gradient-to-br
-          focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50
-          dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm flex items-center justify-center mr-2">
+
+  <!-- Question Input -->
+  <div class="flex flex-col md:flex-row p-5 my-2 justify-center items-center gap-2">
+    <div class="w-full md:w-1/6 text-xl text-center md:text-right flex items-center justify-center md:justify-end">
+      <span class="size-10 text-white bg-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300
+          dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium
+          rounded-lg text-sm flex items-center justify-center mr-2">
         {{ind+1}}
       </span>
-      Question :
+      Question:
     </div>
-    <input type="text" class="rounded-md w-5/6 mx-3" [(ngModel)]="question.theQuestion">
+    <input type="text" class="rounded-md w-full md:w-5/6 mx-3 p-2 border border-gray-300"
+      [(ngModel)]="question.theQuestion">
   </div>
 
-  <div class="flex p-5 mb-2 justify-center items-center">
-    <div class="w-1/6 text-xl text-center">Choices : </div>
-    <div class="w-5/6 border-2 rounded-md p-3 flex flex-col justify-center items-center">
+  <!-- Choices -->
+  <div class="flex flex-col md:flex-row p-5 mb-2 justify-center items-start gap-3">
+    <div class="w-full md:w-1/6 text-xl text-center md:text-right">Choices:</div>
+    <div class="w-full md:w-5/6 border-2 rounded-md p-3 flex flex-col gap-3">
       @for (item of question.options; track item.key) {
-      <div class="flex mb-2 w-[100%]">
-        <label for="choiceA " class="mr-2 text-xl text-nowrap">{{item.key}} :</label>
-        <input type="text" class="rounded-md w-[100%]" [(ngModel)]="item.option">
-        @if (item.key != "A" && item.key != "B") {
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
+        <label class="text-xl whitespace-nowrap">{{item.key}} :</label>
+        <div class="flex w-full gap-2">
+          <input type="text" class="rounded-md w-full p-2 border border-gray-300" [(ngModel)]="item.option">
+          @if (item.key != 'A' && item.key != 'B') {
           <button type="button" class="text-red-600 hover:scale-110" (click)="deleteChoice(item.key)">
-           <i class="fa-solid fa-xmark"></i>
+            <i class="fa-solid fa-xmark"></i>
           </button>
-        }
-   
+          }
+        </div>
       </div>
       }
+
+      <!-- Add Choice Button -->
       @if (validChoice) {
-      <button type="button"
-        class="mt-2 ml-2 p-3 rounded-lg text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium text-sm text-center me-2 mb-2"
-        (click)="handelAddChoice()">
+      <button type="button" class="mt-2 p-3 rounded-lg text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br
+        focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50
+        dark:shadow-lg dark:shadow-green-800/80 font-medium text-sm text-center" (click)="handelAddChoice()">
         Add Choice
       </button>
       }
     </div>
-
   </div>
 
-  <div class="flex rounded-md p-5 mb-2 justify-center items-center">
-    <label class="w-1/6 text-center">Correct Answer</label>
-    <select class="rounded-md w-5/6" [ngModel]="getCorrectAnswerKey()" (ngModelChange)="onCorrectAnswerChange($event)">
+  <!-- Correct Answer Selector -->
+  <div class="flex flex-col md:flex-row rounded-md p-5 mb-2 justify-center items-center gap-3">
+    <label class="w-full md:w-1/6 text-center md:text-right">Correct Answer</label>
+    <select class="rounded-md w-full md:w-5/6 p-2 border border-gray-300" [ngModel]="getCorrectAnswerKey()"
+      (ngModelChange)="onCorrectAnswerChange($event)">
       <option value="">Select correct answer</option>
       @for (item of question.options; track $index) {
       <option [value]="item.key">
