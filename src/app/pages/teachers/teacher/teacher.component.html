@@ -4,13 +4,30 @@
   <!-- Avatar Section -->
   <div class="flex justify-center pt-6">
     <div class="relative">
+      <!-- إذا الصورة موجودة -->
       <div
-        class="w-24 h-24 rounded-full bg-green-100 border-4 border-white shadow-md flex items-center justify-center"
+        *ngIf="teacher.user.userProfile?.secure_url; else showAvatar"
+        class="w-24 h-24 rounded-full border-4 border-white shadow-md overflow-hidden"
       >
-        <span class="text-2xl font-bold text-green-800">{{
-          getInitials(teacher.user.name)
-        }}</span>
+        <img
+          [src]="teacher.user.userProfile.secure_url"
+          alt="Profile image"
+          class="w-full h-full object-cover"
+        />
       </div>
+
+      <!-- إذا ما في صورة، نعرض الأفاتار النصي -->
+      <ng-template #showAvatar>
+        <div
+          class="w-24 h-24 rounded-full bg-green-100 border-4 border-white shadow-md flex items-center justify-center"
+        >
+          <span class="text-2xl font-bold text-green-800">
+            {{ getInitials(teacher.user.name) }}
+          </span>
+        </div>
+      </ng-template>
+
+      <!-- Badge -->
       <div
         class="absolute -bottom-2 -right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm"
       >

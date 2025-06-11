@@ -26,28 +26,35 @@
       <div class="flex items-center gap-4">
         <div class="relative group">
           <img
-            src="https://i.pravatar.cc/40?u=avatar"
-            class="rounded-full border border-gray-300 cursor-pointer hover:border-green-500 transition-all"
+            *ngIf="userProfileUrl; else initialsTemplate"
+            [src]="userProfileUrl"
+            class="rounded-full border border-gray-300 cursor-pointer hover:border-green-500 transition-all object-cover"
             width="40"
             height="40"
             alt="User Avatar"
             [title]="'Logged in as ' + role"
           />
+
+          <ng-template #initialsTemplate>
+            <div
+              class="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center font-bold cursor-pointer hover:opacity-90 transition-all"
+              [title]="'Logged in as ' + role"
+            >
+              {{ getInitials(userName) }}
+            </div>
+          </ng-template>
+
           <!-- Dropdown Menu -->
           <div
             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 invisible group-hover:visible transition-all opacity-0 group-hover:opacity-100"
           >
             <div class="px-4 py-2 text-sm text-gray-700 border-b">
               <div class="font-medium">
-                {{ "User" }}
+                {{ userName }}
               </div>
               <div class="text-green-600">{{ role }}</div>
             </div>
-            <a
-              routerLink="/profile"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >Profile</a
-            >
+
             <a
               *ngIf="role === 'admin'"
               routerLink="/admin"

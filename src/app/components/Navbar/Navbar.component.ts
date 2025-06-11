@@ -16,17 +16,39 @@ export class NavbarComponent implements OnInit, OnDestroy {
   role: string | null = null;
   isScrolled = false;
 
+  userName: string = '';
+  userProfileUrl: string | null = null;
+
   private authSubscription!: Subscription;
+  private userInfoSubscription!: Subscription;
 
   constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit() {
+    // ✅ الاشتراك بحالة تسجيل الدخول
     this.authSubscription = this.authService.isLoggedIn$.subscribe(
       (loggedIn) => {
         this.isLoggedIn = loggedIn;
         this.role = loggedIn ? this.authService.getUserRole() : null;
+
+        if (!loggedIn) {
+          // إذا خرج من الحساب يتم مسح بيانات المستخدم
+          this.userName = '';
+          this.userProfileUrl = null;
+        }
       }
     );
+
+    // ✅ الاشتراك في بيانات المستخدم المرسلة من السيرفيس
+    this.userInfoSubscription = this.authService.userInfo$.subscribe((info) => {
+      if (info) {
+        this.userName = info.name;
+        this.userProfileUrl = info.userProfile?.secure_url || null;
+      } else {
+        this.userName = '';
+        this.userProfileUrl = null;
+      }
+    });
   }
 
   @HostListener('window:scroll')
@@ -39,7 +61,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
+  getInitials(name: string): string {
+    return name
+      .split(' ')
+      .slice(0, 2)
+      .map((word) => word.charAt(0).toUpperCase())
+      .join('');
+  }
+
   ngOnDestroy() {
     this.authSubscription?.unsubscribe();
+    this.userInfoSubscription?.unsubscribe();
   }
 }
